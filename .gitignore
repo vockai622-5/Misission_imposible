@@ -1,0 +1,17 @@
+# Build artifacts
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# libs folder contains proprietary T-FLEX DOCs DLLs — do not commit
+TFlexDocsUsers/libs/
+
+# NuGet
+*.nupkg
+packages/
+
+# OS
+.DS_Store
+Thumbs.db

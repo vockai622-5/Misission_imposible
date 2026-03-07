@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Целевой фреймворк: .NET Framework 4.8, требуемый T-FLEX DOCs SDK -->
+    <TargetFramework>net48</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>TFlexDocsUsers</AssemblyName>
+    <RootNamespace>TFlexDocsUsers</RootNamespace>
+    <Nullable>disable</Nullable>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+
+  <!--
+    Зависимости T-FLEX DOCs SDK.
+    Сборки (DLL) должны быть скопированы из папки установки T-FLEX DOCs
+    (по умолчанию: C:\Program Files\T-FLEX DOCs 17\) в папку ./libs/.
+    Необходимые файлы:
+      - TFlex.DOCs.Common.dll
+      - TFlex.DOCs.Model.dll        (содержит TFlex.DOCs.Model.References.Users)
+      - TFlex.PdmFramework.dll      (содержит TFlex.PdmFramework.Resolve)
+  -->
+  <ItemGroup>
+    <Reference Include="TFlex.DOCs.Common">
+      <HintPath>libs\TFlex.DOCs.Common.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="TFlex.DOCs.Model">
+      <HintPath>libs\TFlex.DOCs.Model.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="TFlex.PdmFramework">
+      <HintPath>libs\TFlex.PdmFramework.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>
