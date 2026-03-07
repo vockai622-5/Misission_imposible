@@ -1,0 +1,3026 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TFlex.PdmFramework</name>
+    </assembly>
+    <members>
+        <member name="P:TFlex.PdmFramework.CadPresenter.Events.AssemblyTreeChangedEventArgs.Filter">
+            <summary>
+            Настройки конфигурации справочника
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.CadPresenter.Events.AssemblyTreeChangedEventArgs.ApplyDate">
+            <summary>
+            Применять ли фильтр по дате в настройках конфигурации справочника. Если значение не задано то опция не применяется
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.CadPresenter.Events.AssemblyTreeChangedEventArgs.IsLaunchedPdm">
+            <summary>
+            Указывает произошло ли событие в режиме работы PDM
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.CadPresenter.ICadControlPresenter.SetSelection(System.Collections.Generic.IEnumerable{TFlex.PdmFramework.CadPresenter.Model.AssemblyItem})">
+            <summary>
+            При вызове из клиента DOCs уведомляет CAD о смене селекции в окне путём вызова обработчика события
+            <c>SelectionChanged</c>. При вызове из CAD аналогичным образом уведомляет клиент DOCs о смене селекции в
+            просматриваемом документе.
+            </summary>
+            <param name="assemblyItems">Выбранные элементы сборки</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.CadPresenter.IDocsCallback.ObjectsMeasured(TFlex.PdmFramework.CadPresenter.ObjectsMeasuredEventArgs)">
+            <summary>
+            Оповещение об измерении объектов
+            </summary>
+            <param name="argfs"></param>
+        </member>
+        <member name="P:TFlex.PdmFramework.CadPresenter.ObjectsMeasuredEventArgs.Values">
+            <summary>
+            Набор значений измерений
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.CadPresenter.ObjectsMeasuredEventArgs.ModelObjects">
+            <summary>
+            Список идентификаторов объектов CAD, по которым проведены измерения
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Commands.PdmCommandType">
+            <summary>
+            Тип команды
+            <remarks>Определяет тип команды, чтобы избежать дублирования в случае,
+            если такая команда в PDM системе уже имеется</remarks>
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Commands.PdmCommandEventArgs">
+            <summary>
+            Параметры принимаемые при вызове различных функций в команду Pdm системой.
+            <remarks>Поддержка тех или иных параметров зависит от версии PDM</remarks>
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Commands.PdmCommandEventArgs.FocusedObject">
+            <summary>
+            Объект, на котором стоит фокус в контроле в момент вызова команды.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Commands.PdmCommandEventArgs.LinkToParent">
+            <summary>
+            Представление данных в контроле из которого приходит команда
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Commands.PdmCommandEventArgs.SelectedObjects">
+            <summary>
+            Объекты, выбранные в контроле в момент вызова команды.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Commands.PdmCommandEventArgs.SelectedObjectsLinksToParents">
+            <summary>
+            Ссылки на родительские объекты, для выбраных объектов <see cref="P:TFlex.PdmFramework.Commands.PdmCommandEventArgs.SelectedObjects"/>
+            </summary>
+            <remarks>Равен по размеру SelectedObjects. Может содержать null.</remarks>
+        </member>
+        <member name="T:TFlex.PdmFramework.Commands.IPdmCommand">
+            <summary>
+            Интерфейс команды, которая добавляется в контекстное меню проводника справочника файлов.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Commands.IPdmCommand.Execute(TFlex.PdmFramework.Commands.IPdmCommandsRepository,TFlex.PdmFramework.Commands.PdmCommandEventArgs)">
+            <summary>
+            Обработчик команды
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Commands.IPdmCommand.Update(TFlex.PdmFramework.Commands.IPdmCommandsRepository,TFlex.PdmFramework.Commands.PdmCommandEventArgs)">
+            <summary>
+            Обновление состояния команды
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Commands.IPdmCommand.Enabled">
+            <summary>
+            Получение состояния команды.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Commands.IPdmCommand.Visible">
+            <summary>
+            Получение видимости команды.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Commands.IPdmCommand.Caption">
+            <summary>
+            Заголовок команды
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Commands.IPdmCommand.Icon">
+            <summary>
+            Иконка команды
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Commands.IPdmCommand.Type">
+            <summary>
+            Тип команды
+            <remarks>Используется для проверки зарегестрированы ли уже в PDM системе команды с аналогичным назначением.</remarks>
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Commands.CreatePdmCommandsArgs">
+            <summary>
+            Параметры заполняемые пользователем при создании команд при наступлении соответствующего события.
+            <remarks>Поддержка тех или иных параметров зависит от версии PDM</remarks>
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Commands.CreatePdmCommandsArgs.Commands">
+            <summary>
+            Список добавленных команд.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Commands.CreatePdmCommandsArgs.FocusedObject">
+            <summary>
+            Объект на котором стоит фокус в контроле в момент создания команд.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Commands.CreatePdmCommandsArgs.AddOnlyNotSupported">
+            <summary>
+            Добавлять ли только команды, которых нет в основном меню PDM системы.
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Commands.IPdmCommandsRepository">
+            <summary>
+            Интерфейс реализуемый контролами PDM системы, в случае если они поддерживают работу с командами.
+            </summary>
+        </member>
+        <member name="E:TFlex.PdmFramework.Commands.IPdmCommandsRepository.CreateCommands">
+            <summary>
+            Событие наступающие при пересоздании списка команд, контрола.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Commands.IPdmCommandsRepository.IsSupported(TFlex.PdmFramework.Commands.PdmCommandType)">
+            <summary>
+            Проверить, что система уже поддерживает такую команду
+            </summary>
+            <param name="type">Тип команды</param>
+        </member>
+        <member name="T:TFlex.PdmFramework.Desktop.IDesktop">
+            <summary>
+            Рабочий стол
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Desktop.IDesktop.CreateControl">
+            <summary>
+            Создать элемент управления рабочего стола
+            </summary>
+            <returns>Элемент управления рабочего стола</returns>
+        </member>
+        <member name="T:TFlex.PdmFramework.Desktop.IDesktopControl">
+            <summary>
+            Элемент управления рабочего стола
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Desktop.IDesktopControl.Control">
+            <summary>
+            Элемент управления
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Desktop.IDesktopControl.Close">
+            <summary>
+            Уведомление элемента управления о его закрытии. Может использоваться для сохранения настроек элемента управления.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Desktop.IDesktopControl.Refresh">
+            <summary>
+            Обновить информацию
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Document.IEngineeringDocument">
+            <summary>
+            конструкторский документ - объект справочника документов.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Document.IEngineeringDocument.Name">
+            <summary>
+            Наименование
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Document.IEngineeringDocument.LinkedWorkingCopys">
+            <summary>
+            Список объектов файлового справочника связанных с документом
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Document.IEngineeringDocument.GetSelectedLinkedWorkingCopy">
+            <summary>
+            Возвращает объект файлового справочника связанный с документом
+            выбранный пользователем в диалоге если таких объектов много
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Document.IEngineeringDocument.GetSelectedLinkedWorkingCopy(System.Boolean)">
+            <summary>
+            Возвращает объект файлового справочника связанный с объектом номенклатуры
+            выбранный пользователем в диалоге если таких объектов много
+            </summary>
+            <param name="showDialog">Показывать диалог, если связанных объектов больше одного</param>
+        </member>
+        <member name="T:TFlex.PdmFramework.ICertificate">
+            <summary>
+            Сертификат - описание PDM - системы
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.ICertificate.Company">
+            <summary>
+            Имя компании - разработчика PDM - системы.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.ICertificate.Product">
+            <summary>
+            Имя PDM - системы
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.ICertificate.Version">
+            <summary>
+            Основной номер версии
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.ICertificate.ServerName">
+            <summary>
+            Имя сервера
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.ICertificate.UserName">
+            <summary>
+            Имя пользователя
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.IServiceSet">
+            <summary>
+            Набор сервисов, предоставляемых PDM-системой, с которой выполняется интеграция
+            <remarks>Система может предоставлять не все сервисы. В этом случае запрос сервиса может возвратить null.</remarks>
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.IServiceSet.FileRepository">
+            <summary>
+            Интеграция со справочником файлов
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.IServiceSet.NomenclatureReference">
+            <summary>
+            Интеграция со справочником номенклатуры изделий
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.IServiceSet.DocumentsReferense">
+            <summary>
+            Интеграция со справочником документов
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.IServiceSet.Desktop">
+            <summary>
+            Интеграция с рабочим столом
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.IServiceSet.Materials">
+            <summary>
+            Интеграция со справочником материалов
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.IServiceSet.Mail">
+            <summary>
+            Интеграция с почтой
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.IServiceSet.RecycleBin">
+            <summary>
+            Интеграция с корзиной
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.IServiceSet.ConfigurationSettings">
+            <summary>
+            Окно конфигурации
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.IServiceSet.RemarksReference">
+            <summary>
+            Справочник по работе с замечаниями
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.CreateDictionaryDialog">
+            <summary>
+            Создания диалога выбора из словаря
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.ShowReferenceInNewWindow(System.String)">
+            <summary>
+            Открыть справочник в новом окне
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.IServiceSet.Certificate">
+            <summary>
+            Сертификат - описание PDM - системы
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.Connect(System.Boolean)">
+            <summary>
+            Подключение к PDM-системе.
+            </summary>
+            <remarks>
+            Эта функция должна вызываться при запуске приложения перед всеми обращениями к PDM-системе.
+            В случае DOCs появляется диалог авторизации пользователя.
+            </remarks>
+            <returns>Удалось ли подключиться к PDM-системе</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.Connect(System.String)">
+            <summary>
+            Подключение к PDM-системе.
+            </summary>
+            <param name="connectionParametersData">Параметры подключения к серверу</param>
+            <returns></returns>
+        </member>
+        <member name="P:TFlex.PdmFramework.IServiceSet.Connected">
+            <summary>
+            Проверка подключения к PDM-системе.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.Disconnect">
+            <summary>
+            Принудительное отключение приложения от набора сервисов.
+            </summary>
+            <returns>Удалось ли отключиться от PDM-системы</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.FindReference(System.Guid)">
+            <summary>
+            Находит справочник по Guid'у.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.SelectReference(System.Windows.Forms.IWin32Window)">
+            <summary>
+            Выбор справочника из диалога.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.MessageShow(System.Windows.Forms.IWin32Window,System.Exception)">
+            <summary>
+            Вывод сообщения на экран. Заголовок сообщения "Ошибка".
+            </summary>
+            <param name="owner"> </param>
+            <param name="exception"> </param>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.MessageQuestionShow(System.Windows.Forms.IWin32Window,System.String,System.Boolean,System.String)">
+            <summary>
+            Вывод вопроса на экран. Заголовок сообщения "Вопрос".
+            Диалог имеет две кноки "Да", "Нет"
+            </summary>
+            <param name="owner">Владелец</param>
+            <param name="message">Текст сообщения</param>
+            <param name="showPromtOptions">Отображать кнопку с опциями диалога</param>
+            <param name="optionIdentifier"></param>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.Wait(System.String,System.Boolean,System.Delegate,System.Boolean,System.Object[])">
+            <summary>
+            Показывает окно ожидания
+            </summary>
+            <param name="headerText"></param>
+            <param name="enableCancel"></param>
+            <param name="action"></param>
+            <param name="useNewThread"> </param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.Wait(System.String,System.Boolean,System.Delegate,System.Boolean,System.Int32,System.Object[])">
+            <summary>
+            Показывает окно ожидания
+            </summary>
+            <param name="headerText"></param>
+            <param name="enableCancel"></param>
+            <param name="action"></param>
+            <param name="useNewThread"></param>
+            <param name="waitingCountElement"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.InitializeDOCsClientUI">
+            <summary>
+            Инициализирует графические компоненты DOCs
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.ChooseRelationProfile(System.String)">
+            <summary>
+            Вызов диалога выбора правила настройки интеграции
+            </summary>
+            <param name="appName">Имя приложения, для которого осуществляется выбор правила</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.GetApplicationRelationProfile(System.String)">
+            <summary>
+            Возвращает правило настройки интеграции соответствующее приложению и имени, прописанного в реестре.
+            Если имя правила настройки интеграции не прописанно в реестре, 
+            то возвращает первое найденное правило настройки интеграции, соответствующее приложению.
+            </summary>
+            <param name="appName">Имя приложения</param>       
+            <returns>Правило настройки интеграции</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.GetApplicationRelationProfile(System.String,System.Boolean)">
+            <summary>
+            Возвращает правило настройки интеграции соответствующее приложению и имени, прописанного в реестре.
+            Если имя правила настройки интеграции не прописанно в реестре, 
+            то возвращает первое найденное правило настройки интеграции, соответствующее приложению.
+            </summary>
+            <param name="appName">Имя приложения</param>
+            <param name="useCache">Использовать кэш?</param>
+            <returns>Правило настройки интеграции</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.RunDOCsClient">
+            <summary>
+            Запуск клиента T-FLEX DOCs
+            </summary>
+            <remarks>
+            Если DOCs уже запущен, то его окно активизируется с помощью WinAPI-функции SetForegroundWindow
+            </remarks>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.GetGlobalParameterByName(System.String)">
+            <summary>
+            Получить значение глобального параметра DOCs по его имени
+            </summary>
+            <param name="name">Имя глобального параметра</param>
+            <returns>Значение глобального параметра</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.GetOpenningContext(System.Guid)">
+            <summary>
+            Получить информацию об открываемой сборки DOCs по идентификатору объекта справочника.
+            </summary>
+            <param name="referenceObject">Объект справочника</param>
+            <returns>Информация об открываемой сборки DOCs</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.IServiceSet.GetOpenningContext(System.String)">
+            <summary>
+             Получить информацию об открываемой сборки DOCs по пути к файлу.
+            </summary>
+            <param name="filePath">Путь к файлу</param>
+            <returns>Информация об открываемой сборки DOCs</returns>
+        </member>
+        <member name="P:TFlex.PdmFramework.IServiceSet.CommonUiProvider">
+            <summary>
+            Получить провайдер по управлению контролами DOCs
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Mail.IMail">
+            <summary>
+            Почта
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Mail.IMail.CreateControl">
+            <summary>
+            Создать элемент управления почты
+            </summary>
+            <returns>Элемент управления почты</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Mail.IMail.CreateMailNotificationControl">
+            <summary>
+            Создать элемент управления уведомление почты
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:TFlex.PdmFramework.Mail.IMailControl.Control">
+            <summary>
+            Элемент управления
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Mail.IMailControl.Close">
+            <summary>
+            Уведомление элемента управления о его закрытии. Может использоваться для сохранения настроек элемента управления.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Mail.IMailControl.Refresh">
+            <summary>
+            Обновить информацию
+            </summary>
+        </member>
+        <member name="E:TFlex.PdmFramework.Mail.IMailNotificationControl.VisibleStateChanged">
+            <summary>
+            Событие изменения видимости элемента управления.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Mail.IMailNotificationControl.GetRectangle(System.Drawing.Rectangle)">
+            <summary>
+            Получить размеры элемента управления.
+            </summary>
+            <param name="mainWindow">Размеры главного окна</param>
+            <returns></returns>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IMaterial.Guid">
+            <summary>
+            Guid материала
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IMaterial.Name">
+            <summary>
+            Наименование материала
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IMaterial.MaterialMarkName">
+            <summary>
+            Наименование марки материала
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IMaterial.Denotation1">
+            <summary>
+            "Обозначение (1-я строка)
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IMaterial.Denotation2">
+            <summary>
+            "Обозначение (2-я строка)
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IMaterial.Denotation3">
+            <summary>
+            "Обозначение (3-я строка)
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IMaterial.Denotation4">
+            <summary>
+            "Обозначение (4-я строка)
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IMaterial.PhysicalProperties">
+            <summary>
+            Физические свойства материала
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IMaterial.VisualProperties">
+            <summary>
+            Визуальные свойства материала
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMPhysicalProperties.Type">
+            <summary>
+            Материал (изотопный, ортотропный)
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMPhysicalProperties.Density">
+            <summary>
+            Плотность
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMPhysicalProperties.Stress">
+            <summary>
+            Предел прочности на разрыв
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMPhysicalProperties.CompressionLimit">
+            <summary>
+            Предел прочности на сжатие
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMPhysicalProperties.YieldStrength">
+            <summary>
+            Предел текучести
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMPhysicalProperties.SpecificHeat">
+            <summary>
+            Удельная теплоёмкость
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMPhysicalProperties.Elasticity">
+            <summary>
+            Упругость
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMPhysicalProperties.Puasson">
+            <summary>
+            Кофф. Пуансона
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMPhysicalProperties.Shear">
+            <summary>
+            Модуль сдвига
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMPhysicalProperties.Expansion">
+            <summary>
+            Кофф. расширения
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMPhysicalProperties.ThermalConductivity">
+            <summary>
+            Теплопроводность
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMVisualProperties.Name">
+            <summary>
+            Наименование
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMVisualProperties.AmbientColor">
+            <summary>
+            Окружающий цвет
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMVisualProperties.DiffuseColor">
+            <summary>
+            Основной цвет
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMVisualProperties.SpecularColor">
+            <summary>
+            Отражающий цвет
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMVisualProperties.EmissiveColor">
+            <summary>
+            Свечение
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMVisualProperties.Shininess">
+            <summary>
+            Глянец (блеск)
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMVisualProperties.Reflection">
+            <summary>
+            Отражение
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Materials.IPDMVisualProperties.Transparency">
+            <summary>
+            Прозрачность
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Nomenclature.INomenclatureControl">
+            <summary>
+            Элемент управления справочника номенклатуры
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.INomenclatureControl.Control">
+            <summary>
+            Элемент управления
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureControl.Close">
+            <summary>
+            Уведомление элемента управления о его закрытии. Может использоваться для сохранения настроек элемента управления.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureControl.Refresh">
+            <summary>
+            Обновить информацию
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.INomenclatureControl.SelectionChanged">
+            <summary>
+            Событие при смене селекции в окне
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureControl.ChangeSelection(System.Collections.Generic.IEnumerable{TFlex.PdmFramework.Nomenclature.INomenclatureItem})">
+            <summary>
+            Выбрать элементы в окне
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureControl.ChangeSelection(System.Collections.Generic.IEnumerable{TFlex.PdmFramework.Nomenclature.INomenclatureItem},System.Collections.Generic.IEnumerable{System.Guid})">
+            <summary>
+            Выбрать элементы в окне
+            </summary>
+            <param name="items">Элементы справочника</param>
+            <param name="links">Идентификаторы связей родитель-потомок. Для выделения используется потомок.</param>
+        </member>
+        <member name="T:TFlex.PdmFramework.Nomenclature.INomenclatureItem">
+            <summary>
+            Элемент справочника номенклатуры
+            </summary>
+            <remarks>
+            Реализация метода IEquatable&lt;INomenclatureItem&gt;.Equal позволяет проверять, что объекты ссылаются на один и тот же элемент справочника
+            </remarks>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.INomenclatureItem.Name">
+            <summary>
+            Наименование
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.INomenclatureItem.Denotation">
+            <summary>
+            Обозначение
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.INomenclatureItem.VariantName">
+            <summary>
+            Вариант
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.INomenclatureItem.LinkedWorkingCopys">
+            <summary>
+            Список объектов файлового справочника связанных с объектом номенклатуры
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureItem.GetSelectedLinkedWorkingCopy">
+            <summary>
+            Возвращает объект файлового справочника связанный с объектом номенклатуры
+            выбранный пользователем в диалоге если таких объектов много
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureItem.GetSelectedLinkedWorkingCopy(System.Boolean)">
+            <summary>
+            Возвращает объект файлового справочника связанный с объектом номенклатуры
+            выбранный пользователем в диалоге если таких объектов много
+            </summary>
+            <param name="showDialog">Показывать диалог, если связанных объектов больше одного</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureItem.GetMaterial">
+            <summary>
+            Получение (выбор из списка) связанного материала
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureItem.GetPosition(System.Guid)">
+            <summary>
+            Возвращает позицию дочернего объекта по Guid подключения 
+            </summary>
+            <param name="complexHierarchyLink"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureItem.GetPositionByParentObject(System.Guid)">
+            <summary>
+            Возвращает позицию по Guid родительского объекта
+            </summary>
+            <param name="parentObject">Guid родительского объекта</param>
+            <returns>Позиция</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureItem.GetAssemblyTree(TFlex.PdmFramework.Nomenclature.GetAssemblyOptions)">
+            <summary>
+            Получение информации о сборке.
+            <remarks>Возвращает корень дерева структуры сборки</remarks>
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureItem.SelectConfigurationParameterDescription">
+            <summary>
+            Выбор описания параметра конфигурации изделия из диалога
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureItem.GetConfigurationParameterDescription(System.String)">
+            <summary>
+            Получение описания параметра конфигурации изделия по строке
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureItem.GetConfigurationParameter(TFlex.PdmFramework.Structure.IParameterDescription)">
+            <summary>
+            Получение параметра конфигурации изделия по его описанию
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureItem.GetOriginalFileUpdateStatus(System.DateTime,System.String)">
+            <summary>
+            Получить статус актуальности файла подлинника, связанного с элементом номенклатуры
+            </summary>
+            <param name="date">Дата последнего изменения файла оригинала</param>
+            <param name="name">Имя файла подлинника</param>
+            <returns>True - в случае если файл подлинника всё ещё актуален, False - в случае если файл подлинника не актуален</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureItem.AddLinkedOriginalFile(TFlex.PdmFramework.Repository.IWorkingCopy,System.String)">
+            <summary>
+            Связать элемент номенклатуры с файлом подлинника
+            </summary>
+            <param name="workingCopy">Ссылка на файл подлинника</param>
+            <param name="name">Имя файла подлинника</param>
+            <returns>True - в случае успешного связывания, False - в случае возникновения ошибки</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureItem.AddLinkedFile(TFlex.PdmFramework.Repository.IWorkingCopy)">
+            <summary>
+            Связать элемент номенклатуры с файлом
+            </summary>
+            <param name="workingCopy">Ссылка на файл</param>
+            <returns>True - в случае успешного связывания, False - в случае возникновения ошибки</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureItem.CheckIn">
+            <summary>
+            Применить изменения к элементу номенклатуры
+            </summary>
+            <returns>True - в случае успешного применения изменений, False - в случае возникновения ошибки или невозможности применения изменений</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureItem.CheckOut">
+            <summary>
+            Взять на редактирование элемент номенклатуры
+            </summary>
+            <returns>True - в случае успешного взятия на редактирование, False - в случае возникновения ошибки или невозможности взятия на редактирование</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureItem.UndoCheckOut">
+            <summary>
+            Отменить изменения элемента номенклатуры
+            </summary>
+            <returns>True - в случае успешной отмены изменений, False - в случае возникновения ошибки или невозможности отмены изменений</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureItem.GetMainMaterial">
+            <summary>
+            Получить основной материал объекта
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:TFlex.PdmFramework.Nomenclature.NomenclatureSaveParameters">
+            <summary>
+            Параметры принимаемые функцией сохранения в номенклатуру.
+            <remarks>Поддержка тех или иных параметров зависит от версии PDM</remarks>
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureSaveParameters.SavedTreeRepository">
+            <summary>
+            Данные о структуре сборке сохраняемой в номенклатуре
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureSaveParameters.ResultTree">
+            <summary>
+            Дерево сборки сохранённой в номенклатуре
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureSaveParameters.LastSavedTree">
+            <summary>
+            Дерево сборки, полученная при предыдущем сохранении
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureSaveParameters.BaseVersion">
+            <summary>
+            Базовое исполнение
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureSaveParameters.ResultTrees">
+            <summary>
+            Деревья сборок сохранённой в номенклатуре
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureSaveParameters.PDMApplicationRelationProfile">
+             <summary>
+            Настройки правил передачи данных из приложения в PDM
+             </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureSaveParameters.SaveIfNoChanges">
+            <summary>
+            Сохранять структуру сборки, даже в случае если
+            IWorkingCopy.Reader корневого объекта поддерживает интерфейс INomenclatureDataRepository
+            и стуктура сборки не отличается от переданной в SavedTreeRepository
+            <remarks>По умолчанию false</remarks>
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureSaveParameters.Variant">
+            <summary>
+            Вариант сохраняемого объекта
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureSaveParameters.Result">
+            <summary>
+            Результат сохранения
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureSaveParameters.ResultObject">
+            <summary>
+            Объект полученный в результате сохранения в справочник Электронная структура изделия
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureSaveParameters.ResultReferenceItems">
+            <summary>
+             Объекты полученные в результате сохранения в справочник
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureSaveParameters.ShowDilog">
+            <summary>
+            Показывать диалог при сохранении
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Nomenclature.INomenclatureReference">
+            <summary>
+            Интеграция со справочником номенклатуры
+            <remarks>
+            Замечания в описаниии каждой функции являются требованием к реализации каждого справочника файлов
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.Create">
+            <summary>
+            Создать новый объект в справочнике номенклатуры.
+            </summary>
+            <returns>Информация из справочника</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.SaveInNomenclature(TFlex.PdmFramework.Nomenclature.NomenclatureSaveParameters)">
+            <summary>
+            Сохранение структуры сборки в номенклатуре
+            </summary>
+            <param name="saveParameters">Параметры сохранения в номенклатуру</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.SaveInNomenclature(TFlex.PdmFramework.Nomenclature.NomenclatureSaveParameters,System.Boolean)">
+            <summary>
+            Сохранение структуры сборки в номенклатуре
+            </summary>
+            <param name="saveParameters">Параметры сохранения в номенклатуру</param>
+            <param name="autoCheckIn">Автоматическое применение изменений</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.GetFolderToSave">
+            <summary>
+            Функция получения директории в номенклатуре для сохранения сборки
+            </summary>
+            <returns>Каталог справочника номенклатуры</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.GetType(TFlex.PdmFramework.Nomenclature.NomenclatureObjectData.TypeEnum)">
+            <summary>
+            Функция получения объекта типа данной PDM системы
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.GetRootFolder">
+            <summary>
+            Корневой каталог справочника номенклатуры
+            </summary>
+            <returns>Корневой каталог справочника номенклатуры</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.GenerateDesignationByClassifier">
+            <summary>
+            Сформировать обозначение по классификатору ЕСКД.
+            </summary>
+            <returns>Первый элемент кортежа возвращает строку с кодом выбранным пользователем по классификатору ЕСКД. Второй элемент кортежа возвращает строку с порядковым номером, который был зарезервирован в справочнике "Реестр обозначений ЕСКД".</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.CreateControl">
+            <summary>
+            Создать элемент управления справочника номенклатуры
+            </summary>
+            <returns>Элемент управления справочника номенклатуры</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.CreateAssemblyControl(TFlex.PdmFramework.Nomenclature.INomenclatureItem)">
+            <summary>
+            Создать элемент управления отображающий структуру сборки в справочнике номенклатуры
+            </summary>
+            <returns>Элемент управления отображающий структуру сборки в справочнике номенклатуры</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.FindNomenclatureItem(TFlex.PdmFramework.Repository.IWorkingCopy)">
+            <summary>
+            Поиск объекта номенклатуры, связанного с файлом.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.FindNomenclatureItem(System.Guid)">
+            <summary>
+            Поиск объекта номенклатуры по Guid.
+            </summary>
+            <param name="guid"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.FindNomenclatureItem(System.Collections.Generic.Dictionary{System.Guid,System.Object})">
+            <summary>
+            Поиск объекта номенклатуры по значениям параметров уникальности
+            </summary>
+            <param name="uniqeParamsValues">Словарь GUID'ов параметров и их значений</param>
+            <returns>Объект номенклатуры</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.GetUniqeParameters(TFlex.PdmFramework.Nomenclature.NomenclatureObjectData.TypeEnum)">
+            <summary>
+            Получить параемтры уникальности для типа номенклатуры
+            </summary>
+            <param name="type">Тип</param>
+            <returns>Словарь GUID'ов параметров уникальности и их наименований</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.GetApplicationsProfiles">
+            <summary>
+            Получение списка правил передачи данных из приложений в PDM
+            </summary>       
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.GetApplicationsProfiles(System.Boolean)">
+            <summary>
+            Получение списка правил передачи данных из приложений в PDM
+            </summary>
+            <param name="useCache">Использовать кэш?</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.SetDefaultProfile(TFlex.PdmFramework.Nomenclature.PDMApplicationRelationProfile)">
+            <summary>
+            Установать правило передачи данных из приложений в PDM по-умолчанию
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.SelectParameterInfo">
+            <summary>
+            Выбор из диалога описание параметра номенклатуры.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.FindParameterInfo(System.Guid)">
+            <summary>
+            Получение описания параметра.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.SelectParameterDescription">
+            <summary>
+            Выбор из диалога описание параметра номенклатуры.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.GetParameterDescription(System.String)">
+            <summary>
+            Получение описания параметра по строке
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.INomenclatureReference.UpdateAssemblyTree(TFlex.PdmFramework.Nomenclature.NomenclatureTreeNode,TFlex.PdmFramework.CadPresenter.Events.AssemblyTreeChangedEventArgs)">
+            <summary>
+            Обновление информации о сборке
+            </summary>
+            <param name="treeNode">Обновляемая сборка</param>
+            <param name="args">Информация об изменении</param>
+            <returns></returns>
+        </member>
+        <member name="T:TFlex.PdmFramework.Nomenclature.ICADObjectIdentifier">
+            <summary>
+            Идентификатор объекта связанного с объектом номенклатуры в CAD системе
+            </summary>
+            <remarks>Реализация метода IEquatable&lt;ICADObjectIdentifier&gt;.Equal позволяет проверять, что объекты ссылаются на один и тот же элемент справочника</remarks>
+        </member>
+        <member name="T:TFlex.PdmFramework.Nomenclature.IPDMType">
+            <summary>
+            Объект хранящий информацию о типе объекта, сериализуемый при созранении дерева
+            <remarks>Реализация может быть различной для различных PDM систем.</remarks>
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Nomenclature.NomenclatureObjectData">
+            <summary>
+            Параметры необходимые для задания объекта в справочнике номенклатуры.
+            <remarks>Поддержка тех или иных параметров зависит от версии PDM</remarks>
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureObjectData.Item">
+            <summary>
+            Объект в справочнике номенклатуры
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureObjectData.Name">
+            <summary>
+            Наименование
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureObjectData.Denotation">
+            <summary>
+            Обозначение
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureObjectData.Code">
+            <summary>
+            Код ФНН
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureObjectData.Letter">
+            <summary>
+            Литера
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureObjectData.Mass">
+            <summary>
+            Масса
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureObjectData.Format">
+            <summary>
+            Формат
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureObjectData.BomSection">
+            <summary>
+            Раздел спецификации
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureObjectData.PDMType">
+            <summary>
+            Тип
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureObjectData.FilePath">
+            <summary>
+            Объект в файловом справочнике
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureObjectData.CadDocumentContext">
+            <summary>
+            Контекст документа в CAD системе - содержит данные необходимые для инициализации файла при открытии
+            при открытии файла PDM возвращает ассоциированный контекст при вызове IWorkingCopy.GetOpeningContext
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureObjectData.AdditionalFiles">
+            <summary>
+            Дополнительные файлы которые следует связать с объектом номенклатуры
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureObjectData.UserChanges">
+            <summary>
+            Набор флагов показывающий какие свойства были вручную изменены пользователем
+            до снятия соответствующего флага, данные не обновляются
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureObjectData.AttachAssemblyFile">
+            <summary>
+            Подключать ли файл сборки к детали без чертежа.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureObjectData.DocumentItem">
+            <summary>
+            Связанный документ.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureTreeNode.Parent">
+            <summary>
+            Родительский объект
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.NomenclatureTreeNode.AddChild(TFlex.PdmFramework.Nomenclature.NomenclatureTreeNode)">
+            <summary>
+            Добавить дочерний элемент структуры
+            </summary>
+            <param name="child">Дочерний элемент структуры</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Nomenclature.NomenclatureTreeNode.RemoveChild(TFlex.PdmFramework.Nomenclature.NomenclatureTreeNode)">
+            <summary>
+            Удалить дочерний элемент структуры
+            </summary>
+            <param name="child">Дочерний элемент структуры</param>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureTreeNode.Marker">
+            <summary>
+            Метка узла. Помечаются узлы дерева в ручную созданные или скрытые пользователем.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureTreeNode.Identifier">
+            <summary>
+            Идентификатор объекта связанного с объектом номенклатуры в CAD системе
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureTreeNode.AllLinkedIdentifiers">
+            <summary>
+            Список всех идентификаторов связанных с объектом номенклатуры используется если с одним узлом дерева изделия связано несколько объектов в CAD системе 
+            например в случае узла "болтовое соединение", дополнительные идентификаторы добавляются функцией AddAdditionalIdentifier
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureTreeNode.Amount">
+            <summary>
+            Количество
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.NomenclatureTreeNode.Guid">
+            <summary>
+            Идентификатор связи либо объекта в справочнике номенклатуры, которому соответствует этот узел дерева
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Nomenclature.PDMApplicationRelationProfile">
+            <summary>
+            Настройки правил передачи данных из приложения в PDM
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.PDMApplicationRelationProfile.Name">
+            <summary>
+            Наименование
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.PDMApplicationRelationProfile.ApplicationName">
+            <summary>
+            Идентификатор приложения с которым осуществляется связь
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.PDMApplicationRelationProfile.EnvironmentSettingsFile">
+            <summary>
+            Файл настройки окружения
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.PDMApplicationRelationProfile.ParametersRelations">
+            <summary>
+            Правила передачи параметров из приложения в PDM
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.PDMApplicationRelationProfile.AssociatedParameters">
+            <summary>
+            Правила настройки связей параметров CAD с параметрамиPDM
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.PDMApplicationRelationProfile.ReferenceForDataExchange">
+            <summary>
+            Справочника с которым происходит обмен данных.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.PDMApplicationRelationProfile.Description">
+            <summary>
+            Описание
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.PDMApplicationRelationProfile.PdmTypes">
+            <summary>
+            Информация о типах заданных в правилах настройки интеграции приложений
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Nomenclature.PDMApplicationRelationProfile.DownloadableFolders">
+            <summary>
+            Загружаемые папки
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources._Lock">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.Check">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.CheckIn">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.CheckInCommand">
+            <summary>
+              Looks up a localized string similar to Отдать изменения.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.CheckOut">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.CopyToDesktopCommand">
+            <summary>
+              Looks up a localized string similar to Копировать на рабочий стол.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.Create">
+            <summary>
+              Looks up a localized string similar to Создать.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.CreateFolderCommand">
+            <summary>
+              Looks up a localized string similar to Создать папку.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.Delete">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.Empty">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.Folder">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.GetLatestVersion">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.GridColumnAuthor">
+            <summary>
+              Looks up a localized string similar to Автор.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.GridColumnComment">
+            <summary>
+              Looks up a localized string similar to Комментарий.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.GridColumnCreationDate">
+            <summary>
+              Looks up a localized string similar to Дата создания.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.GridColumnFileIndication">
+            <summary>
+              Looks up a localized string similar to Обозначение файла.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.GridColumnFileName">
+            <summary>
+              Looks up a localized string similar to Имя файла.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.GridColumnFileStage">
+            <summary>
+              Looks up a localized string similar to Состояние файла.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.GridColumnFolders">
+            <summary>
+              Looks up a localized string similar to Папки.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.History">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.HistoryCommand">
+            <summary>
+              Looks up a localized string similar to История.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.OpenForEditCommand">
+            <summary>
+              Looks up a localized string similar to Открыть для редактирования.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.OpenForViewCommand">
+            <summary>
+              Looks up a localized string similar to Открыть для просмотра.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.Preview">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.RefreshInformationCommand">
+            <summary>
+              Looks up a localized string similar to Обновить информацию.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.RefreshStatus">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.Remove">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.RemoveFromDesktopCommand">
+            <summary>
+              Looks up a localized string similar to Удалить с рабочего стола.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.RemoveFromStorageCommand">
+            <summary>
+              Looks up a localized string similar to Удалить из хранилища.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.RepositoryDialogCaptionOpen">
+            <summary>
+              Looks up a localized string similar to Открыть файл.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.RepositoryDialogCaptionSaveAs">
+            <summary>
+              Looks up a localized string similar to Сохранить файл как.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.UndoCheckOut">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Properties.Resources.UndoEditCommand">
+            <summary>
+              Looks up a localized string similar to Отменить редактирование.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.RecycleBin.IRecycleBin.CreateControl">
+            <summary>
+            Создать элемент управления корзина
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:TFlex.PdmFramework.RecycleBin.IRecycleBinControl.Control">
+            <summary>
+            Элемент управления
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.RecycleBin.IRecycleBinControl.Icon">
+            <summary>
+            Иконка окна
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.RecycleBin.IRecycleBinControl.Close">
+            <summary>
+            Уведомление элемента управления о его закрытии. Может использоваться для сохранения настроек элемента управления.
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Remarks.IRemark">
+            <summary>
+            Замечание объекта
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Remarks.IRemark.Guid">
+            <summary>
+            Идентификатор 
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Remarks.IRemark.Text">
+            <summary>
+            Текст замечания
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Remarks.IRemark.BinaryData">
+            <summary>
+            Служебные данные
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Remarks.IRemark.XmlData">
+            <summary>
+            Служебные данные
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Remarks.IRemark.Author">
+            <summary>
+            Автор
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Remarks.IRemark.ChangeAuthor">
+            <summary>
+            Автор изменения
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Remarks.IRemark.Status">
+            <summary>
+            Статус замечания
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Remarks.IRemark.CloseAuthor">
+            <summary>
+            Автор закрытия
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Remarks.IRemark.Importance">
+            <summary>
+            Важность
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Remarks.IRemark.DateCreation">
+            <summary>
+            Дата создания
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Remarks.IRemark.DateClose">
+            <summary>
+            Дата закрытия
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Remarks.IRemark.DateChange">
+            <summary>
+            Дата изменения
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Remarks.IRemark.SaveChanged">
+            <summary>
+            Сохранить изменения на сервер
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Remarks.IRemark.Delete">
+            <summary>
+            Удалить замечание
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Remarks.IRemark.CanDelete">
+            <summary>
+            Проверка можно ли удалить замечание
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Remarks.IRemark.GetStatusEvents">
+            <summary>
+            Команды вызова пользовательских событий справочника по изменению статуса замечаний
+            </summary>
+            <returns>Команды</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Remarks.IRemark.GetRemarkEvents">
+            <summary>
+            Команды вызова пользовательских событий справочника (кроме по изменению статуса замечаний)
+            </summary>
+            <returns>Команды</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Remarks.IRemark.ShowPropertyAsync">
+            <summary>
+            Показать диалог свойств
+            </summary>
+            <returns>Результат диалога после закрытия</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Remarks.IRemark.Reload">
+            <summary>
+            Перезагружает параметры и связи объекта
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Remarks.IRemarksReference.GetRemarks(System.String)">
+            <summary>
+            Получить все замечания для файла.
+            </summary>
+            <param name="filePath">Путь к файлу</param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Remarks.IRemarksReference.GetCadRemarks(System.String)">
+            <summary>
+            Получить CAD замечания.
+            </summary>
+            <param name="filePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Remarks.IRemarksReference.GetCadRemarks(TFlex.PdmFramework.Repository.IWorkingCopy)">
+            <summary>
+            Получить CAD замечания.
+            </summary>
+            <param name="workingCopy"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Remarks.IRemarksReference.GetPdfRemarks(System.String)">
+            <summary>
+            Получить PDF замечания.
+            </summary>
+            <param name="filePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Remarks.IRemarksReference.GetRequestRemarks(System.String)">
+            <summary>
+            Получить запросы.
+            </summary>
+            <param name="filePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Remarks.IRemarksReference.GetImageRemarks(System.String)">
+            <summary>
+            Получить замечания изображения.
+            </summary>
+            <param name="filePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Remarks.IRemarksReference.AddRemark(System.String,System.String,System.String)">
+            <summary>
+            Добавить PDF замечание.
+            </summary>
+            <param name="file"></param>
+            <param name="text"></param>
+            <param name="xmlData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Remarks.IRemarksReference.AddRemark(System.String,System.String,System.Byte[])">
+            <summary>
+            Добавить CAD замечание.
+            </summary>
+            <param name="file"></param>
+            <param name="text"></param>
+            <param name="binaryData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Remarks.IRemarksReference.AddImageRemark(System.String,System.String,System.String)">
+            <summary>
+            Добавить замечание изображения.
+            </summary>
+            <param name="file"></param>
+            <param name="text"></param>
+            <param name="xmlData"></param>
+            <returns></returns>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.RepositoryDocumentType">
+            <summary>
+            Реализация типов в справочнике документов. Должно существовать соответствие между типами в приложении и типами справочника документов.
+            Это соответствие задаётся в настройках приложения.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.RepositoryDocumentType.#ctor(System.String,System.Guid)">
+            <summary>
+            
+            </summary>
+            <param name="description">Некое строковое описание типа в произвольной форме. </param>
+            <param name="id">
+            Идентификатор типа. Адресация типа в справочнике документов может быть любой сложности, но у типа должен быть внешний по отношению к приложениям идентификатор.
+            Именно по этому идентификатору выполняется связка с классами из справочника файлов.
+            </param>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.RepositoryDocumentType.Description">
+            <summary>
+            Некое строковое описание типа в произвольной форме.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.RepositoryDocumentType.Id">
+            <summary>
+            Идентификатор типа. Адресация nbgf в справочнике документов может быть любой сложности, но у типа должен быть внешний по отношению к приложениям идентификатор.
+            Именно по этому идентификатору выполняется связка с типами из справочника документов.
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.FileTypeDescription">
+            <summary>
+            Реализация типов файлов в справочнике файлов. Должно существовать соответствие между типами в приложении и типами справочника файлов.
+            Это соответствие задаётся в настройках приложения.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.FileTypeDescription.#ctor(System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            
+            </summary>
+            <param name="description">Некое строковое описание типа в произвольной форме.
+            Идентификатор типа. Адресация типа в файловом справочнике может быть любой сложности, но у типа должен быть внешний по отношению к приложениям идентификатор.
+            Именно по этому идентификатору выполняется связка с типами из справочника файлов.
+            </param>
+            <param name="extensions">Список расширений файлов</param>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.FileTypeDescription.Description">
+            <summary>
+            Некое строковое описание типа в произвольной форме.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.FileTypeDescription.Extensions">
+            <summary>
+            Список расширений.
+            <remarks>Расширения без "*.", например, "grb"</remarks>
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.RepositoryFileType">
+            <summary>
+            Реализация типов файлов в справочнике файлов. Должно существовать соответствие между типами в приложении и типами справочника файлов.
+            Это соответствие задаётся в настройках приложения.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.RepositoryFileType.#ctor(System.String,System.Guid,System.Collections.Generic.List{System.String})">
+            <summary>
+            
+            </summary>
+            <param name="description">Некое строковое описание типа в произвольной форме. </param>
+            <param name="id">
+            Идентификатор типа. Адресация типа в файловом справочнике может быть любой сложности, но у типа должен быть внешний по отношению к приложениям идентификатор.
+            Именно по этому идентификатору выполняется связка с типами из справочника файлов.
+            </param>
+            <param name="extensions">Список расширений файлов</param>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.RepositoryFileType.Id">
+            <summary>
+            Идентификатор типа. Адресация типа в файловом справочнике может быть любой сложности, но у типа должен быть внешний по отношению к приложениям идентификатор.
+            Именно по этому идентификатору выполняется связка с типами из справочника файлов.
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.HiddenCommand">
+            <summary>
+            Команда используется для того, чтобы сделать невидимыми команды самой PDM, если таковые у неё есть.
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.SelectionChangeReason">
+            <summary>
+            Возможные причины изменения селектированного объекта
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.ExplorerCommandHandler">
+            <summary>
+            Делагат обработчика выбора пользовательской команды
+            </summary>
+            <param name="copy">Элемент файлового справочника</param>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.IExplorerView">
+            <summary>
+            Элемент управления для навигации по справочнику файлов. Данный элемент можно встраивать в окна приложения, которое интегрируется с PDM системой
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IExplorerView.Refresh">
+            <summary>
+            Обновить информацию
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.PDMCommandType">
+            <summary>
+            Тип команды
+            <remarks>В некоторых PDM системах уже есть своё меню с такими же по смыслу командами.
+            Чтобы перекрыть эти команды своми желательно знать тип команды.</remarks>
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.IExplorerControl">
+            <summary>
+            Элемент управления для навигации по справочнику файлов. Данный элемент можно встраивать в окна приложения, которое интегрируется с PDM системой
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IExplorerControl.Control">
+            <summary>
+            Элемент управления
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IExplorerControl.AddCommand(TFlex.PdmFramework.Repository.IRepositoryCommand,TFlex.PdmFramework.Repository.PDMCommandType,System.Boolean)">
+            <summary>
+            Добавить команду в диалог
+            <remarks>Команда может добавляться в панель инструментов, в контекстное меню или ещё куда-то в диалоге. Всё зависит от реализации элемента управления в конкретной PDM системе</remarks>
+            <remarks>Регистрировать команды следует перед встраиванием элемента управления в окно</remarks>
+            <remarks>Поддержка этой возможности зависит от реащизации в конкретной PDM системе</remarks>
+            <remarks>Если система не поддерживает эту возможность, то может возникнуть исключение NotSupportedException</remarks>
+            </summary>
+            <param name="command">Интерфейс команды, которая добавляется в контекстное меню проводника справочника файлов.</param>
+            <param name="type">Тип команды
+            <remarks>В некоторых PDM системах уже есть своё меню с такими же по смыслу командами.
+            Чтобы перекрыть эти команды своми желательно знать тип команды.</remarks>
+            </param>
+            <param name="addOnlyNotSupported">Добавлять команды, которых нет в основном меню PDM системы</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IExplorerControl.IsSupported(TFlex.PdmFramework.Repository.PDMCommandType)">
+            <summary>
+            Проверить, что система уже поддерживает такую команду
+            </summary>
+            <param name="type">Тип команды</param>
+            <returns></returns>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IExplorerControl.SelectCommand">
+            <summary>
+            Двойное нажатие левой клавиши мыыши обрабатывается клиентским приложением
+            <remarks>Поддержка этой возможности зависит от реащизации в конкретной PDM системе</remarks>
+            <remarks>Если система не поддерживает эту возможность, то может возникнуть исключение NotSupportedException</remarks>
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IExplorerControl.SelectionChanged">
+            <summary>
+            Обработчик события выбора другого элемента в диалоге
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IExplorerControl.CurrentFolder">
+            <summary>
+            Текущая выбранная папка
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IExplorerControl.Close">
+            <summary>
+            Уведомление элемента управления о его закрытии. Может использоваться для сохранения настроек элемента управления.
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.IFileReader">
+            <summary>
+            Интерфейс чтения информации из файла. Редактор файлов должен реализовать этот интерфейс для всех типов файлов, которые хранятся в справочнике файлов.
+            <remarks>
+            Это основной интерфейс, который должен быть реализован в классом, знающим какие-то конкретные форматы приложения, которое интегрируется со справочником файлов.
+            Для каждого справочника файла согласно его требованиям создаётся интерфейс, порождённый из IFileReader. Плюс добваляются порождения в зависимости от того,
+            какая информация требуется конкретному справочнику файлов
+            </remarks>
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.IFileLinkCollection">
+            <summary>
+            Интерфейс чтения информации из файла. Поддержка ссылок на другие файлы.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IFileLinkCollection.Collection">
+            <summary>
+            Ссылки на другие файлы.
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.IAssemblyFileHierarchyReader">
+            <summary>
+            Интерфейс получения иерархии файлов сборки.
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.IFileType">
+            <summary>
+            Интерфейс чтения информации из файла. Поддержка типа файла.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IFileType.Type">
+            <summary>
+            Предполагаемый тип файла. Используется при добавлении файлов в справочник файлов.
+            <remarks>
+            Имя типа может настраиваться в конечном приложении.
+            В справочнике файлов должна быть зарегистрирована функция, которая преобразует это имя в объект "Тип файла".
+            Реализация объекта "Тип файла" зависит от справочника файла.
+            </remarks>
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.IFileDescription">
+            <summary>
+            Интерфейс чтения информации из файла. Поддержка описания файла.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IFileDescription.Title">
+            <summary>
+            Наименование файла.
+            </summary>
+            <remarks>Это не имя файла в файловой системе, а некий дружественный псевдоним, который по умолчанию совпадает с именем файла</remarks>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IFileDescription.FileName">
+            <summary>
+            Имя файла с расширением в файловой системе 
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.IDocumentType">
+            <summary>
+            Интерфейс чтения информации из файла. Поддержка типа документа.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IDocumentType.DocumentType">
+            <summary>
+            Предполагаемый тип документа. Используется для создания записи в справочнике документа.
+            <remarks>
+            Имя типа может настраиваться в конечном приложении.
+            В справочнике документов должна быть зарегистрирована функция, которая преобразует это имя в объект "Тип документа".
+            Реализация объекта "Тип документа" зависит от справочника документов.
+            </remarks>
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.FileReaderFactory">
+            <summary>
+            Функция, которая умеет создавать экземпляры классов, которые умеют читать информацию из файла данного типа.
+            <param name="path">Путь в рабочей папке</param>
+            <returns>Экземпляр класса, который умеет читать информацию из файла данного типа</returns>
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.FileReaderFactoryCollection">
+            <summary>
+            Множество функций, которые умеет создавать экземпляры классов, которые умеют читать информацию из файла данного типа.
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.OpenFileHandler">
+            <summary>
+            Функция, которая умеет открывать файлы, поддерживаемые приложением
+            </summary>
+            <param name="path">Путь к файлу</param>
+            <returns>true, если файл поддерживается и был открыт</returns>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.OpenFileHandlerCollection">
+            <summary>
+            Множество функций, которые умеют открывать файлы, поддерживаемые приложением
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.INomenclatureDataRepository">
+            <summary>
+            Интерфейс получения данных о структуре сборки в номенклатуре.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.INomenclatureDataRepository.AssemblyTree">
+            <summary>
+            Получение информации о сборке.
+            <remarks>Возвращает корень дерева структуры сборки</remarks>
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.INomenclatureDataExRepository">
+            <summary>
+            Интерфейс получения данных о структуре сборки в номенклатуре.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.INomenclatureDataExRepository.AssemblyTrees">
+            <summary>
+            Получение информации о сборках.
+            <remarks>Возвращает список сборок.</remarks>
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.IRepositoryCommand">
+            <summary>
+            Интерфейс команды, которая добавляется в контекстное меню проводника справочника файлов.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IRepositoryCommand.Handler(TFlex.PdmFramework.Repository.IRepositoryItem,TFlex.PdmFramework.Repository.IExplorerView)">
+            <summary>
+            Обработчик команды
+            </summary>
+            <param name="item">Элемент файлового справочника</param>
+            <param name="control">Элемент управления для навигации по справочнику файлов</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IRepositoryCommand.Enable(TFlex.PdmFramework.Repository.IRepositoryItem,TFlex.PdmFramework.Repository.IExplorerView)">
+            <summary>
+            Разрешать команду
+            </summary>
+            <param name="item">Элемент файлового справочника</param>
+            <param name="control">Элемент управления для навигации по справочнику файлов</param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IRepositoryCommand.Show(TFlex.PdmFramework.Repository.IRepositoryItem,TFlex.PdmFramework.Repository.IExplorerView)">
+            <summary>
+            Не показывать команду
+            </summary>
+            <param name="item">Элемент файлового справочника</param>
+            <param name="control">Элемент управления для навигации по справочнику файлов</param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IRepositoryCommand.Name(TFlex.PdmFramework.Repository.IRepositoryItem,TFlex.PdmFramework.Repository.IExplorerView)">
+            <summary>
+            Имя команды
+            </summary>
+            <param name="item">Элемент файлового справочника</param>
+            <param name="control">Элемент управления для навигации по справочнику файлов</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IRepositoryCommand.Icon(TFlex.PdmFramework.Repository.IRepositoryItem,TFlex.PdmFramework.Repository.IExplorerView)">
+            <summary>
+            Иконка команды
+            </summary>
+            <param name="item">Элемент файлового справочника</param>
+            <param name="control">Элемент управления для навигации по справочнику файлов</param>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.CopyFolderDelegate">
+            <summary>
+            Делегат для асинхронного копирования папки на диск
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.IRepositoryFolder">
+            <summary>
+            Папка
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IRepositoryFolder.GetItems">
+            <summary>
+            Множество элементов в папке
+            </summary>
+            <returns>Множество элементов в папке</returns>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IRepositoryFolder.IsEmpty">
+            <summary>
+            Множество элементов в папке пусто.
+            <remarks>В ряде PDM систем в отличие от вызова GetItems эта проверка выполняется значительно быстрее</remarks>
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IRepositoryFolder.AddNewFolder(System.String)">
+            <summary>
+            Создаёт все папки, которые встречаются в пути и возвращает нижнюю папку.
+            </summary>
+            <remarks>Функция работает только с относительными путями. В противном случае возвращается null. Допускается путь через несколько уровней.</remarks>
+            <returns>Нижняя папка</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IRepositoryFolder.Add(TFlex.PdmFramework.Repository.AbsolutePath,System.Boolean)">
+            <summary>
+            Добавить существующий файл в папку.
+            </summary>
+            <remarks>
+            Файл копируется в справочник файлов. Для редактирования не открывается.
+            Папка, в которой размещается файл определяется в диалоге.
+            Если файл добавляется вместе с подсборками, то положение подсборок соответствует относительным путям в сборке.
+            Если файлы уже есть в файле справочника, то они не добавляются.
+            Функция может использоваться для добавления подсборок, которых нет в справочнике файлов.
+            </remarks>
+            <param name="path">Путь к файлу</param>
+            <param name="recursive">Рекурсивно по всей сборке</param>
+            <returns>Информация из справочника</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IRepositoryFolder.AddAsync(TFlex.PdmFramework.Repository.AbsolutePath,System.Boolean,System.AsyncCallback)">
+            <summary>
+            Добавить существующий файл в папку. Асинхронная версия.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IRepositoryFolder.Copy(System.Boolean,System.Boolean)">
+            <summary>
+            Копировать на диск.
+            <remarks>
+            Если файл не существует на диске, то файл копируется на диск из справочника файлов.
+            </remarks>
+            Если файл уже существует, не открыт для редактирования и изменился в справочнике файлов, то он перезаписывается содержимым из справочника файлов.
+            </summary>
+            <param name="recursive">Рекурсивно по всем подпапкам</param>
+            <param name="update">Если версия файла устарела, то обновить её</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IRepositoryFolder.CopyAsync(System.Boolean,System.Boolean,System.AsyncCallback)">
+            <summary>
+            Копировать на диск. Асинхронная версия.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IRepositoryFolder.CreateDirectory(System.Boolean)">
+            <summary>
+            Создать соответствующую папку на диске
+            </summary>
+            <param name="recursive">Выполнить рекурсивно по всем подпапкам</param>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.DeleteDelegate">
+            <summary>
+            Делегат для асинхронного удаления файла из справочника файла
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.IRepositoryItem">
+            <summary>
+            Элемент файлового справочника
+            </summary>
+            <remarks>Реализация метода IEquatable&lt;IRepositoryItem&gt;.Equal позволяет проверять, что объекты ссылаются на один и тот же элемент файлового справочника</remarks>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IRepositoryItem.Name">
+            <summary>
+            Имя файла с раширением или имя папки
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IRepositoryItem.Icon">
+            <summary>
+            Иконка для обозначения файла. Некоторые хранилища реализуют хранение картинок для более удобоного отображения файла.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IRepositoryItem.GetParentFolder">
+            <summary>
+            Папка, с которой лежит файл или папка.
+            <remarks>
+            Путь к файлу состоит из трёх частей :
+            1) Рабочая папка, в которую копируются файлы с сервера. Эта папка задаётся в настройках клиента файлового справочника;
+            2) Имя раздела файлового сервера, в котором хранится файл;
+            3) Путь к файлу в файловом справочнике. В файловом справочнике хранится информация о размещении файла на файловом сервере и дополнительная информация.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IRepositoryItem.Author">
+            <summary>
+            Автор последних измененений
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IRepositoryItem.Comment">
+            <summary>
+            Комментарий к последнему изменению
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IRepositoryItem.Date">
+            <summary>
+            Дата последнего изменения
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IRepositoryItem.GetLocation">
+            <summary>
+            Полный путь к файлу или папке на диске.
+            <remarks>
+            Путь к файлу или папке состоит из трёх частей :
+            1) Рабочая папка, в которую копируются файлы с сервера. Эта папка задаётся в настройках клиента файлового справочника;
+            2) Имя раздела файлового сервера, в котором хранится файл или папка;
+            3) Путь к файлу или папке в файловом справочнике. В файловом справочнике хранится информация о размещении файла или папки на файловом сервере и дополнительная информация.
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IRepositoryItem.Delete(System.Boolean,System.Boolean)">
+            <summary>
+            Удалить файл или пустую папку из справочника файлов.
+            <remarks>
+            Эта функция не выполняется рекурсивно, так как файл может быть не загружен на диск, а информация о связях может не поддерживаться в хранилище.
+            Возможно, cо временем будет добавлена поддержка рекурсивного удаления.
+            </remarks>
+            <param name="remove">Удалить файл или пустую папку на диске</param>
+            <param name="check">Если объект не может быть удалён, то генерировать исключение</param>
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IRepositoryItem.DeleteAsync(System.Boolean,System.Boolean,System.AsyncCallback)">
+            <summary>
+            Удалить файл или пустую папку из справочника файлов. Асинхронная версия.
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.WorkingCopyState">
+            <summary>
+            Состояние файла
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.OpenningContext">
+            <summary>
+            Контекст открытия файла
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.OpenningContext.Repository">
+            <summary>
+            Из какого справочника был открыт файл
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.OpenningContext.LinkedObject">
+            <summary>
+            Объект, содержащий связь на файл, контексте которого файл открыт.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.OpenningContext.NomenclatureItem">
+            <summary>
+            Объект номенклатуры в контексте которого открыт файл.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.OpenningContext.Context">
+            <summary>
+            Котекст связанный с файлом.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.OpenningContext.ReadOnly">
+            <summary>
+            Открывать ли файл только для чтения.
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.CopyDelegate">
+            <summary>
+            Делегат для асинхронного копирования файла на диск
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.OpenForEditDelegate">
+            <summary>
+            Делегат для асинхронного открытия для редактирования
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.SubmitDelegate">
+            <summary>
+            Делегат для асинхронной отдачи файла в файловое хранилище
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.UndoCheckOutDelegate">
+            <summary>
+            Делегат для отменения изменений
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.RemoveDelegate">
+            <summary>
+            Делегат для асинхронного удаления файла с диска
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.IWorkingCopy">
+            <summary>
+            Функции файлового справочника.
+            <remarks>
+            В первую очередь предлагается реализация работы с файловым справочником DOCs. Но можно реализовать и свой файловый справочник.
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.Copy(System.Boolean,System.Boolean)">
+            <summary>
+            Копировать на диск.
+            <remarks>
+            Если файл не существует на диске, то файл копируется на диск из справочника файлов.
+            </remarks>
+            Если файл уже существует, не открыт для редактирования и изменился в справочнике файлов, то он перезаписывается содержимым из справочника файлов.
+            </summary>
+            <param name="recursive">Рекурсивно по всей сборке</param>
+            <param name="update">Если версия файла устарела, то обновить её</param>      
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.CopyAsync(System.Boolean,System.Boolean,System.AsyncCallback)">
+            <summary>
+            Копировать на диск. Асинхронная версия.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.CopyIfNeed(System.Boolean,System.Boolean)">
+            <summary>
+            Копировать на диск, если это необходимо. Если файл уже существует или необходимость в обновлении его нет, то файл не будет загружаться.
+            </summary>
+            <param name="recursive">Рекурсивно по всей сборке</param>
+            <param name="update">Если версия файла устарела, то обновить её</param>
+            <returns>Указывает был ли загружен/обновлен файл с сервера</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.OpenForEdit(System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Открыть для редактирования. Другие пользователи не могут редактировать этот файл.
+            <remarks>
+            Если файл уже заблокирован кем-то другим, то возникает исключение.
+            </remarks>
+            </summary>
+            <param name="copy">Копировать файл из файлового справочника на диск. Если файл ранее был скопирован, то выполняется синхронизация</param>
+            <param name="recursive">Копировать рекурсивно по всей сборке.</param>
+            <remarks>Открывается для редактирования только верхний файл. Посборки только копируются</remarks>
+            <param name="update">Если версия файла устарела, то обновить её</param>
+            <param name="check">Если объект не был открыт для редактирования, то генерировать исключение</param>
+            <remarks>
+            Разумеется, можно до захвата или после захвата файла вызвать функцию Copy. Но иногда удобнее захват и копирование делать в одном месте.
+            </remarks>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.OpenForEditAsync(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.AsyncCallback)">
+            <summary>
+            Открыть для редактирования. Асинхронная версия.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.GetOpenningContext">
+            <summary>
+            Получить контекст открытия файла.
+            <remarks>
+            Актуально значение возвращается только при первом после открытия вызове, после чего контекст очищается PDM системой.
+            </remarks>        
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.SetOpenningContext(TFlex.PdmFramework.Structure.IReferenceItem)">
+            <summary>
+            Установить контекст открытия файла.
+            </summary>
+            <param name="referenceItem">Объект в контексте которого должен открываться файл</param>   
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.FindOpenningContext(TFlex.PdmFramework.Nomenclature.INomenclatureItem)">
+            <summary>
+            Найти контекст файла по объекту номенклатуры
+            </summary>
+            <param name="nomenclatureItem">Объект номенклатуры</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.Save(TFlex.PdmFramework.Repository.WorkingCopySaveParameters)">
+            <summary>
+            Дополнительные дествия при сохранении файла. Добавление локальных файлов по ссылкам в справочник.
+            </summary>
+            <returns>Возвращает false в случае отмены операции</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.Submit(System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Отдать файл. Файл копируется в файловый справочник.
+            </summary>
+            <param name="comment">Описание изменения</param>
+            <param name="unlock">Разблокировать файл для редактирования другими пользователями</param>
+            <param name="recursive">Рекурсивно по всей сборке</param>
+            <remarks>Для подсборок, если они не были захвачены исключение не генерируется</remarks>
+            <param name="remove">Удалить файл с диска. Если выполняется рекурсивная отдача, то удаление также выполняется рекурсивно</param>
+            <param name="check">Если объект не был открыт для редактирования, то генерировать исключение</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.SubmitAsync(System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.AsyncCallback)">
+            <summary>
+            Отдать файл. Файл копируется в файловый справочник. Асинхронная версия.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.UndoCheckOut(System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Отменить изменения. Файл разблокируется.
+            <remarks>
+            Если файл не удаляется с диска, то он перезаписывается содержимым из справочника файлов.
+            </remarks>
+            </summary>
+            <param name="remove">Удалить файл с диска</param>
+            <param name="recursive">Рекурсивно по всей сборке</param>
+            <param name="check">Если объект не был открыт для редактирования, то генерировать исключение</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.UndoCheckOutAsync(System.Boolean,System.Boolean,System.Boolean,System.AsyncCallback)">
+            <summary>
+            Отменить изменения. Файл разблокируется. Асинхронная версия.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.Remove(System.Boolean,System.Boolean)">
+            <summary>
+            Удалить файл с диска.
+            <remarks>
+            Эта функция не удаляет файл из справочника файла.
+            </remarks>
+            </summary>
+            <param name="recursive">Рекурсивно по всей сборке</param>
+            <remarks>
+            Функция не выполняет предварительного прохода для проверки всех файлов сборки. Так что, открытые на редактирование подсборки не будут удалены из рабочей папки.
+            </remarks>
+            <param name="check">Если объект был открыт для редактирования, то генерировать исключение</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.RemoveAsync(System.Boolean,System.Boolean,System.AsyncCallback)">
+            <summary>
+            Удалить файл с диска. Асинхронная версия.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IWorkingCopy.Reader">
+            <summary>
+            Чтение информации из файла.
+            </summary>
+            <remarks>
+            Можно непосредственно назначать интерфейс для чтения информации. Например.
+            Файл уже есть и IFileReader для него создан.
+            Находим информацию о файле в справочнике файлов и связываем с уже созданным IFileReader
+            </remarks>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.GetState">
+            <summary>
+            Проверяется состояние файла.
+            <remarks>Состояние не запоминается и проверяется каждый раз при вызове функции.</remarks>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.ConverFragmentIds(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Получает по идентификаторам фрагмента T-FLEX DOCs 11 путь к файлу в T-FLEX DOCs 12
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.IsActual">
+            <summary>
+            Проверка актуальности файла на рабочем столе
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.IsActual(System.Boolean)">
+            <summary>
+            Проверка актуальности файла на рабочем столе
+            </summary>
+            <param name="reload">
+            true, если требуется обновить информацию об актуальности файла, в противном случае - false
+            если информация об актульности файла недоступна, то обновление будет вызвано безусловно
+            </param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.ShowPropertiesDialog(System.Windows.Forms.IWin32Window)">
+            <summary>
+            Показать диалог свойств файла
+            </summary>
+            <param name="parentWindow"></param>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IWorkingCopy.HasLinkedFiles">
+            <summary>
+            Возвращает true, если есть связанные файлы
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.GetLinkedFiles">
+            <summary>
+            Возвращает связанные файлы
+            </summary>
+            <returns>Список связанных файлов</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.SetLinkedFiles(System.Collections.Generic.IEnumerable{TFlex.PdmFramework.Repository.AbsolutePath})">
+            <summary>
+            Задает список связанных файлов
+            </summary>
+            <param name="files">Список связанных файлов</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.AddLinkedFile(TFlex.PdmFramework.Repository.AbsolutePath)">
+            <summary>
+            Добавляет связанный файл
+            </summary>
+            <param name="file">Файл</param>
+            <returns>Связанный файл</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IWorkingCopy.RemoveLinkedFile(TFlex.PdmFramework.Repository.AbsolutePath)">
+            <summary>
+            Удаляет связанный файл
+            </summary>
+            <param name="file">Файл</param>
+            <returns>true, если файл присутствовал в списке связанных и был удалён</returns>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.WorkingCopySaveParameters.PathMap">
+            <summary>
+            Карта соответствия путей для скопированных файлов
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.WorkingCopySaveParameters.FileLinks">
+            <summary>
+            Список файлов, используемых в сборке
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.WorkingCopySaveParameters.PreviousPath">
+            <summary>
+            Предыдущий путь к сборке, если она не распологалась в хранилище DOCs
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.WorkingCopySaveParameters.Check">
+            <summary>
+            Если объект не был открыт для редактирования, то генерировать исключение
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.ISupportWorkingFolder">
+            <summary>
+            Интерфейс для задания рабочей папки. Реализуется справочниками файлов, которые не поддерживают рабочие папки
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.ISupportWorkingFolder.RootWorkingFolder">
+            <summary>
+            Рабочая папка
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.ISupportWorkingFolder.AddUserName">
+            <summary>
+            Добавлять к рабочей папке подкаталог с именем пользователя
+            <remarks>В некоторых системах понятие пользователя может не использоваться. В этом случае параметр игнорируется и подкаталог не создаётся</remarks>
+            <remarks>Наиболее предпочтительный вариант формирования пути: "Рабочая папка\Имя Сервера\Имя хранилища\Имя пользователя\" </remarks>
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.ISupportWorkingFolder.AddServerName">
+            <summary>
+            Добавлять к рабочей папке подкаталог с именем сервера
+            <remarks>В некоторых системах понятие сервера может не использоваться. В этом случае параметр игнорируется и подкаталог не создаётся</remarks>
+            <remarks>Наиболее предпочтительный вариант формирования пути: "Рабочая папка\Имя Сервера\Имя хранилища\Имя пользователя\" </remarks>
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.ISupportWorkingFolder.AddStorageName">
+            <summary>
+            Добавлять к рабочей папке подкаталог с именем хранилища
+            <remarks>В некоторых системах понятие хранилища может не использоваться. В этом случае параметр игнорируется и подкаталог не создаётся</remarks>
+            <remarks>Наиболее предпочтительный вариант формирования пути: "Рабочая папка\Имя Сервера\Имя хранилища\Имя пользователя\" </remarks>
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.IPath">
+            <summary>
+            Путь к файлу.
+            <remarks>
+            Файл может храниться где угодно: на файл-сервере, в рабочей папке, в глобальной сети, в архиве.
+            Путь также может храниться в любом формате. Например, URL.
+            </remarks>
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.StringPath">
+            <summary>
+            Путь задаётся строкой. Реализован как наиболее часто встречающийся способ представления.
+            </summary>
+            <remarks>Путь может быть отнсительным или в специфическом для данного приложения формате</remarks>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.IFileSystemPath">
+            <summary>
+            Путь может быть преобразован в полный путь на диске в строковом виде, как в Windows.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IFileSystemPath.Path">
+            <summary>
+            Полный путь на диске
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.AbsolutePath">
+            <summary>
+            Полный путь к файлу. Реализован как наиболее часто встречающийся способ представления.
+            Добавлены методы для создания наименования файла и имени файла в файловой системе
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.AbsolutePath.Title">
+            <summary>
+            Имя файла без расширения
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.AbsolutePath.FileName">
+            <summary>
+            Имя файла с расширением
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.AbsolutePath.Extension">
+            <summary>
+            Расширение
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.AbsolutePath.Directory">
+            <summary>
+            Папка
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.AbsolutePath.RelativePath(System.String,System.Boolean,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Вычислить относительный путь
+            </summary>
+            <param name="fromPath">Полный путь, относительно которого строится относительный путь</param>
+            <param name="fromPathIsDirectory">указывает на то, что <paramref name="fromPath"/> - путь к директории</param>
+            <param name="toPath">Полный путь, для которого строится относительный путь</param>
+            <param name="toPathIsDirectory">указывает на то, что <paramref name="toPath"/> - путь к директории</param>
+            <param name="makeCanonical">Конвертировать относительный путь в каноническое представление</param>
+            <returns></returns>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.AbsolutePathCollection">
+            <summary>
+            Множество полных путей.
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.StringPathCollection">
+            <summary>
+            Множество путей.
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.AddDelegate">
+            <summary>
+            Делегат для асинхронной версии  функции добавления существующего файла в справочник. 
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.SaveAsDelegate">
+            <summary>
+            Делегат для асинхронной версии  функции добавления существующего файла в справочник. 
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.FindDelegate">
+            <summary>
+            Делегат для асинхронной версии  функции поиска файла в справочнике по пути в рабочей папке.
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.AddDialogResult">
+            Результат работы диалога для добавления файла в справочник.
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.AddDialogResult.Folder">
+            <summary>
+            Папка, в которую будет добавляться файл
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.AddDialogResult.Name">
+            <summary>
+            Имя файла в файловом справочнике
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.AddDialogResult.Recursive">
+            <summary>
+            Добавлять рекурсивно
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.AddDialogResult.Tag">
+            <summary>
+            Дополнительная информация, специфичная для конкретной PDM.
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.AddDialogParameters">
+            <summary>
+            Предварительные параметры для диалога добавления файла в справочник.
+            <remarks>Поддержка тех или иных параметров зависит от версии PDM</remarks>
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.AddDialogParameters.Folder">
+            <summary>
+            Папка, в которую будет добавляться файл
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.AddDialogParameters.Name">
+            <summary>
+            Имя файла в файловом справочнике
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.AddDialogParameters.ShowRecursive">
+            <summary>
+            Показывать опцию выбора рекурсивного добавления
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.AddDialogParameters.Path">
+            <summary>
+            Путь к добавляемому файлу
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.AddDialogParameters.Extensions">
+            <summary>
+            Список расширений
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.AddDialogParameters.Extension">
+            <summary>
+            Расширение
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.IFileRepository">
+            <summary>
+            Интеграция со справочником файлов
+            <remarks>
+            Замечания в описаниии каждой функции являются требованием к реализации каждого справочника файлов
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.GetFragments(TFlex.PdmFramework.Repository.IWorkingCopy)">
+            <summary>
+            Получить список фрагментов входящих в указанную сборку
+            </summary>
+            <param name="workingCopy">Файл сборки</param>
+            <returns>Список фрагментов</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.Create">
+            <summary>
+            Создать новый файл в справочнике.
+            </summary>
+            <remarks>
+            Файл сразу копируется в рабочий каталог и открывается для редактирования.
+            </remarks>
+            <returns>Информация из справочника</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.Add(TFlex.PdmFramework.Repository.AbsolutePath,System.Boolean)">
+            <summary>
+            Добавить существующий файл в справочник.
+            </summary>
+            <remarks>
+            Файл копируется в справочник файлов. Для редактирования не открывается.
+            Папка, в которой размещается файл определяется в диалоге.
+            Если файл добавляется вместе с подсборками, то положение подсборок соответствует относительным путям в сборке.
+            Если файлы уже есть в файле справочника, то они не добавляются.
+            Функция может использоваться для добавления подсборок, которых нет в справочнике файлов.
+            </remarks>
+            <param name="info">Путь к файлу</param>
+            <param name="recursive">Рекурсивно по всей сборке</param>
+            <returns>Информация из справочника</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.AddDialog(TFlex.PdmFramework.Repository.AddDialogParameters)">
+            <summary>
+            Диалог для добавления файла в справочник.
+            </summary>
+            <remarks>
+            В диалоги задаются параметры добавления файла в справочник файлов:
+            - Папка, в которой будет размещаться файл;
+            - Имя файла;
+            - Дополнительные параметры, специфичные для конкретной PDM системы.
+            </remarks>
+            <param name="parameters">Предварительные параметры</param>
+            <returns>
+            Информация для добавления файла в справочник
+            <remarks>
+            Если пользователь отказался от сохранения, то функция возвращает null
+            </remarks>
+            </returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.SaveAs(TFlex.PdmFramework.Repository.AbsolutePath,TFlex.PdmFramework.Repository.AddDialogResult)">
+            <summary>
+            Добавить существующий файл в справочник.
+            </summary>
+            <remarks>
+            Параметры для добавления формируются в результате вызова функции AddAsync.
+            </remarks>
+            <param name="info">Путь к файлу</param>
+            <param name="parameters">Параметры для добавления</param>
+            <returns>Информация из справочника</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.SaveAsAsync(TFlex.PdmFramework.Repository.AbsolutePath,TFlex.PdmFramework.Repository.AddDialogResult,System.AsyncCallback)">
+            <summary>
+            Добавить существующий файл в справочник. Асинхронная версия.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.Select(System.Collections.Generic.List{System.String},System.Boolean,System.Boolean,System.Boolean@)">
+            <summary>
+            Выбрать файлы из справочника.
+            </summary>
+            <param name="extensions">Список расширений</param>
+            <param name="multipleSelect">Допускается множественный выбор</param>
+            <param name="hidePreview">Не показывать опцию просмотра</param>
+            <param name="openForPreview">Файл был выбран для просмотра</param>
+            <returns>Множество файлов из справочника</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.Select(System.IntPtr,System.Collections.Generic.List{System.String},System.Boolean,System.Boolean,System.Boolean@)">
+            <summary>
+            Выбрать файлы из справочника.
+            </summary>
+            <param name="owner">Владелец диалога</param>
+            <param name="extensions">Список расширений</param>
+            <param name="multipleSelect">Допускается множественный выбор</param>
+            <param name="hidePreview">Не показывать опцию просмотра</param>
+            <param name="openForPreview">Файл был выбран для просмотра</param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.Select(TFlex.PdmFramework.Repository.IRepositoryFolder,System.Boolean)">
+            <summary>
+            Выбрать папки из справочника.
+            </summary>
+            <param name="selectedFolder">Папка, предлагаемая по умолчанию</param>
+            <param name="multipleSelect">Допускается множественный выбор</param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.Find(TFlex.PdmFramework.Repository.IFileSystemPath)">
+            <summary>
+            Найти файл или папку в справочнике по пути в рабочей папке.
+            </summary>
+            <param name="path">Путь к файлу или папке</param>
+            <returns>Информация из справочника</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.FindAsync(TFlex.PdmFramework.Repository.IFileSystemPath,System.AsyncCallback)">
+            <summary>
+            Найти файл или папку в справочнике по пути в рабочей папке. Асинхронная версия.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.Find(TFlex.PdmFramework.Repository.IFileSystemPath[])">
+            <summary>
+            Найти файлы или папки в справочнике по пути в рабочей папке.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IFileRepository.ReaderFactory">
+            <summary>
+            Регистрация функций, которые умеют создавать экземпляры классов, которые умеют читать информацию из файла данного типа.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IFileRepository.OpenFileHandlers">
+            <summary>
+            Регистрация функций, которые умеют файлы, поддерживаемые приложением
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.IFileRepository.WorkingFolder">
+            <summary>
+            Рабочая папка, в которую копируются файлы из хранилища.
+            </summary>
+            <remarks>К рабочему пути добавляется также имя раздела файлового сервера, в котором хранится файл.</remarks>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.CreateExplorer(System.Boolean)">
+            <summary>
+            Создать контрол для навигации по справочнику файлов
+            </summary>
+            <param name="caption">Показывать заголовок</param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.CreateExplorer(System.Boolean,TFlex.PdmFramework.Repository.RepositoryFileTypeCollection)">
+            <summary>
+            Создать контрол для навигации по справочнику файлов
+            </summary>
+            <param name="caption">Показывать заголовок</param>
+            <param name="filter">Множество классов объектов, которые показываются в элементе управления</param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.CreateExplorer(System.Boolean,System.Collections.Generic.List{System.String})">
+            <summary>
+            Создать контрол для навигации по справочнику файлов
+            </summary>
+            <param name="caption">Показывать заголовок</param>
+            <param name="extensions">Множество расширений файлов, которые показываются в диалоге</param>
+            <remarks>Расширения без "*.", например, "grb"</remarks>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.GetRootFolder">
+            <summary>
+            Корневой каталог справочника файлов
+            </summary>
+            <returns>Корневой каталог справочника файлов</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.GetRootFolders">
+            <summary>
+            Список корневых каталогов справочника файлов
+            </summary>
+            <returns>Список корневых каталогов справочника файлов</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.CreateRootFolder(System.String)">
+            <summary>
+            Создать корневой каталог в справочнике файлов
+            </summary>
+            <param name="path">Имя каталога</param>
+            <returns>Корневой каталог справочника файлов</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.GetChanged(System.Collections.Generic.ICollection{TFlex.PdmFramework.Repository.IRepositoryItem},System.DateTime@)">
+            <summary>
+            Получить список файлов/папок в справочнике, изменённых после указанной даты.
+            </summary>
+            <param name="items">Список объектов для проверки</param>
+            <param name="lastCheckDate">Дата последней проверки</param>
+            <returns>Коллекция объектов, изменённых после указанной даты <paramref name="lastCheckDate"/></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.IFileRepository.GetChanged(System.Collections.Generic.ICollection{TFlex.PdmFramework.Repository.IRepositoryItem},System.DateTime@,System.Collections.Generic.ICollection{TFlex.PdmFramework.Repository.IFileSystemPath}@)">
+            <summary>
+            Получить список файлов/папок в справочнике, изменённых после указанной даты.
+            </summary>
+            <param name="items">Список объектов для проверки</param>
+            <param name="lastCheckDate">Дата последней проверки</param>
+            <param name="remotePaths">Список удаленных файлов</param>
+            <returns>Коллекция объектов, изменённых после указанной даты <paramref name="lastCheckDate"/></returns>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.ISupportFileType">
+            <summary>
+            Интеграция со справочником файлов. Поддержка типов файлов.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.ISupportFileType.FileTypeCollection">
+            <summary>
+            Множество типов файлов, которые поддерживаются в справочнике файлов.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.ISupportFileType.AddFileType(TFlex.PdmFramework.Repository.FileTypeDescription)">
+            <summary>
+            Получение списка типов, которые соответствуют заданному описанию. Если таковых нет - они создаются.
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.ISupportDocumentType">
+            <summary>
+            Интеграция со справочником документов. Поддержка типов документов.
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Repository.ISupportDocumentType.DocumentTypeCollection">
+            <summary>
+            Множество типов, которые поддерживаются в справочнике документов.
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.RepositoryException">
+            <summary>Исключение, которое возникает при работе со справочником файлов</summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Repository.RepositoryTools">
+            <summary>
+            Набор методов для выполнения групповых операций со справочником файлов
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.RepositoryTools.CheckOutFolder(TFlex.PdmFramework.Repository.IRepositoryFolder,System.Boolean,System.Boolean)">
+            <summary>
+            Открыть для редактирования все файлы в папке
+            </summary>
+            <remarks>В процессе открытия файла на редактирование может возникнуть ошибка. Такие файлы открыты не будут.</remarks>
+            <param name="folder">Папка</param>
+            <param name="all">Для всех подпапок</param>
+            <param name="update">Если версия файла устарела, то обновить её</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.RepositoryTools.CheckInFolder(TFlex.PdmFramework.Repository.IRepositoryFolder,System.Boolean,System.String,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Отдать изменения всех открытых для редактирования файлов в папке
+            </summary>
+            <remarks>В процессе отдачи может возникнуть ошибка. Такие файлы отданы не будут.</remarks>
+            <param name="folder">Папка</param>
+            <param name="all">Для всех подпапок</param>
+            <param name="comment">Описание изменения</param>
+            <param name="unlock">Разблокировать файл для редактирования другими пользователями</param>
+            <param name="recursive">Рекурсивно по всей сборке</param>
+            <param name="remove">Удалить файл с диска. Если выполняется рекурсивная отдача, то удаление также выполняется рекурсивно</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.RepositoryTools.UndoChekOutFolder(TFlex.PdmFramework.Repository.IRepositoryFolder,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Отменить изменения всех открытых для редактирования файлов в папке
+            </summary>
+            <remarks>В процессе отдачи может возникнуть ошибка. Редактирование таких файлов отменено не будут.</remarks>
+            <param name="folder">Папка</param>
+            <param name="all">Для всех подпапок</param>
+            <param name="recursive">Рекурсивно по всей сборке</param>
+            <param name="remove">Удалить файл с диска</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.RepositoryTools.RemoveFromWorkingFolder(TFlex.PdmFramework.Repository.IRepositoryFolder,System.Boolean,System.Boolean)">
+            <summary>
+            Удалить папку с диска
+            </summary>
+            <remarks>В процессе удаления может возникнуть ошибка. Такие файлы не будут удалены.</remarks>
+            <param name="folder">Папка</param>
+            <param name="all">Для всех подпапок</param>
+            <param name="recursive">Рекурсивно по всей сборке</param>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.RepositoryTools.DeleteFromRepositoryFolder(TFlex.PdmFramework.Repository.IRepositoryFolder,System.Boolean,System.Boolean)">
+            <summary>
+            Удалить папку с диска
+            </summary>
+            <remarks>В процессе удаления может возникнуть ошибка. Такие файлы не будут удалены.</remarks>
+            <param name="folder">Папка</param>
+            <param name="all">Для всех подпапок</param>
+            <returns>Результат удаления папки</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Repository.RepositoryTools.SyncFolder(TFlex.PdmFramework.Repository.IRepositoryFolder,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Копировать папку на диск
+            </summary>
+            <remarks>В процессе копирования файла на редактирование может возникнуть ошибка. Такие файлы скопированы не будут.</remarks>
+            <param name="folder">Папка</param>
+            <param name="all">Для всех подпапок</param>
+            <param name="recursive">Рекурсивно по всей сборке</param>
+            <param name="update">Если версия файла устарела, то обновить её</param>
+        </member>
+        <member name="P:TFlex.PdmFramework.Search.ISearchControl.Control">
+            <summary>
+            Элемент управления
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Search.ISearchControl.Close">
+            <summary>
+            Уведомление элемента управления о его закрытии. Может использоваться для сохранения настроек элемента управления.
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.ServiceCollection">
+            <summary>
+            Класс для доступа и регистрации PDM - систем
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.ServiceCollection.Collection">
+            <summary>
+            Множество загруженных сервисов
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.ServiceCollection.Load(System.String,System.Boolean)">
+            <summary>
+            Загрузка библиотеки по пути. Предполагается, что она оформлена в соответствии с правилами Framework.
+            <remarks>Предполагается, что в одной библиотеке только один класс, порождённый из Services</remarks>
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Structure.IReference.ReferenceInfo">
+            <summary>
+            Информация о справочнике
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReference.SelectParameterInfo">
+            <summary>
+            Выбор из диалога описание параметра номенклатуры.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReference.FindParameterInfo(System.Guid)">
+            <summary>
+            Получение описания параметра.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReference.SelectParameterDescription">
+            <summary>
+            Выбор из диалога описание параметра номенклатуры.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReference.SelectParameterDescription(System.String)">
+            <summary>
+            Выбор описания параметра из диалога с заданным описанием по умолчанию
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReference.GetParameterDescription(System.String)">
+            <summary>
+            Получение описания параметра по строке
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReference.CreateControl">
+            <summary>
+            Создать элемент управления справочника
+            </summary>
+            <returns>Элемент управления справочника</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReference.SelectReferenceItem(System.Guid)">
+            <summary>
+            Выбор из диалога элемента справочника
+            </summary>
+            <param name="baseTypeId">Guid базового типа элемента. Может быть не задан.</param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReference.SelectReferenceItem(System.String)">
+            <summary>
+            Выбор из диалога элемента справочника
+            </summary>
+            <param name="filter">Контекстный фильтр диалога выбора. Может быть не задан.</param>
+        </member>
+        <member name="T:TFlex.PdmFramework.Structure.IReferenceControl">
+            <summary>
+            Элемент управления справочника
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Structure.IReferenceControl.Control">
+            <summary>
+            Элемент управления
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Structure.IReferenceControl.Reference">
+            <summary>
+            Справочник, отображаемый в контроле
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReferenceControl.Close">
+            <summary>
+            Уведомление элемента управления о его закрытии. Может использоваться для сохранения настроек элемента управления.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReferenceControl.Refresh">
+            <summary>
+            Обновить информацию
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Structure.IReferenceInfo">
+            <summary>
+            Информация о справочнике
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReferenceItem.SelectParameter">
+            <summary>
+            Выбрать параметр из диалога
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReferenceItem.FindParameter(System.Guid)">
+            <summary>
+            Поиск параметра объекта
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReferenceItem.FindParameter(TFlex.PdmFramework.Structure.IParameterInfo)">
+            <summary>
+            Поиск параметра объекта
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReferenceItem.SelectParameterDescription">
+            <summary>
+            Выбор описания параметра из диалога
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReferenceItem.SelectParameterDescription(System.String)">
+            <summary>
+            Выбор описания параметра из диалога с заданным описанием по умолчанию
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReferenceItem.GetParameterDescription(System.String)">
+            <summary>
+            Получение описания параметра по строке
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReferenceItem.GetParameter(TFlex.PdmFramework.Structure.IParameterDescription)">
+            <summary>
+            Получение параметра по его описанию
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReferenceItem.ChangeParameters(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.Guid,System.Object}})">
+            <summary>
+            Групповое изменение параметров
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReferenceItem.ChangeParameters(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.Object}})">
+            <summary>
+            Групповое изменение параметров, получает пару (description, значение)
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReferenceItem.ResetParametersCache">
+            <summary>
+            Сбросить внутренний кэш параметров
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Structure.IReferenceItem.RevisionLevelItems">
+            <summary>
+            Возвращает объекты списка "Уровни ревизии"
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.Structure.IReferenceItem.RevisionName">
+            <summary>
+            Возвращает имя ревизии
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReferenceItem.CreateRevision(TFlex.PdmFramework.Structure.IRevisionLevelItem)">
+            <summary>
+            Создает новую ревизию текущего объекта
+            </summary>
+            <param name="revisionLevelItem">Уровень создаваемой ревизии</param>
+            <returns>Созданная ревизия</returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReferenceItem.UndoRevisionCreation">
+            <summary>
+            Отмена создания ревизии
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReferenceItem.NextRevisionName(TFlex.PdmFramework.Structure.IRevisionLevelItem)">
+            <summary>
+            Возвращает следующее имя ревизии
+            </summary>
+            <param name="revisionLevelItem"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReferenceItem.ReplaceRevision(TFlex.PdmFramework.Structure.IReferenceItem,TFlex.PdmFramework.Structure.IReferenceItem)">
+            <summary>
+            Замена ревизии
+            </summary>
+            <param name="oldRevision">Заменяемая ревизия</param>
+            <param name="parent">Родительский объект заменяемой ревизии</param>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.Structure.IReferenceItem.Reload">
+            <summary>
+            Перезагрузить параметры и связи объекта справочника
+            </summary>
+        </member>
+        <member name="T:TFlex.PdmFramework.Structure.IReferenceItemRepository">
+            <summary>
+            Поддержка функциональности справочника (поиск объектов в справочнике и т.д.)
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.UiControls.ICommonUiControl.Control">
+            <summary>
+            Элемент управления
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.UiControls.ICommonUiControl.Info">
+            <summary>
+            Информация об отображаемом контроле
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.UiControls.ICommonUiControl.Close">
+            <summary>
+            Уведомление элемента управления о его закрытии. Может использоваться для сохранения настроек элемента управления.
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.UiControls.ICommonUiControl.Refresh">
+            <summary>
+            Обновить информацию
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.UiControls.ICommonUiControlInfo.Name">
+            <summary>
+            Отображаемое имя контрола
+            </summary>
+        </member>
+        <member name="P:TFlex.PdmFramework.UiControls.ICommonUiControlInfo.Uid">
+            <summary>
+            Идентификатор, отображаемого контрола
+            </summary>
+        </member>
+        <member name="M:TFlex.PdmFramework.UiControls.ICommonUiProvider.GetAllWorkingPages">
+            <summary>
+            Получить описание всех рабочих страниц.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TFlex.PdmFramework.UiControls.ICommonUiProvider.CreateUi(System.String)">
+            <summary>
+            Создать окно по описанию
+            </summary>
+        </member>
+    </members>
+</doc>
