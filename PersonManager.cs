@@ -9,7 +9,7 @@ namespace macros
 {
     public class PersonManager
     {
-        private const string FileName = "person.json";
+        private const string FileName = "person1.json";
         private readonly Random _random;
 
         public class Person
@@ -39,6 +39,7 @@ namespace macros
             try
             {
                 string exePath = AppDomain.CurrentDomain.BaseDirectory;
+                
                 Console.WriteLine($"Попытка 1: Папка с exe - {exePath}");
 
                 if (!exePath.Contains("OneDrive"))
