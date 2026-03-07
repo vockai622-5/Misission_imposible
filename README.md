@@ -31,3 +31,5 @@
 
 ```csharp
 ProcessStudentsFromExcel(string excelFilePath)
+
+!!! exe файл лежит в bin/debug/macros.exe
