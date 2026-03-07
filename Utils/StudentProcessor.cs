@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using macros.Excel;
 
 namespace macros
@@ -7,38 +6,51 @@ namespace macros
     public class StudentProcessor
     {
         private readonly ExcelReader _excelReader;
+        private readonly PersonManager _personManager;
 
         public StudentProcessor()
         {
             _excelReader = new ExcelReader();
+            _personManager = new PersonManager();
         }
 
         public (string groupName, string[][] validData) ProcessStudentsFromExcel(string excelFilePath)
         {
             try
             {
-                // Шаг 1: Читаем данные из Excel
+                Console.WriteLine("╔════════════════════════════════════════════════════════════════╗");
+                Console.WriteLine("║     ОБРАБОТКА ДАННЫХ СТУДЕНТОВ ИЗ EXCEL - T-FLEX DOCs        ║");
+                Console.WriteLine("╚════════════════════════════════════════════════════════════════╝\n");
+
                 Console.WriteLine($"📂 Чтение файла: {excelFilePath}");
                 var (groupName, studentsTable) = _excelReader.ReadStudents(excelFilePath);
                 Console.WriteLine($"✓ Файл прочитан успешно");
                 Console.WriteLine($"✓ Группа: {groupName}");
                 Console.WriteLine($"✓ Найдено записей: {studentsTable.GetLength(0)}\n");
 
-                // Шаг 2: Конвертируем двумерный массив в массив массивов
                 string[][] personArray = ConvertTableToArray(studentsTable);
 
-                // Шаг 3: Обрабатываем данные через PersonManager
                 Console.WriteLine("🔄 Начало обработки и валидации данных...\n");
-                var (resultGroupName, validData) = PersonManager.ProcessPersonData(groupName, personArray);
+                var (resultGroupName, validData) = _personManager.ProcessPersonData(groupName, personArray);
+
+                Console.WriteLine("\n╔════════════════════════════════════════════════════════════════╗");
+                Console.WriteLine("║                    ОБРАБОТКА ЗАВЕРШЕНА                         ║");
+                Console.WriteLine("╚════════════════════════════════════════════════════════════════╝");
 
                 return (resultGroupName, validData);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\nОШИБКА ПРИ ОБРАБОТКЕ: {ex.Message}");
+                Console.WriteLine($"\n❌ ОШИБКА ПРИ ОБРАБОТКЕ: {ex.Message}");
+                Console.WriteLine($"Тип: {ex.GetType().Name}");
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Внутренняя ошибка: {ex.InnerException.Message}");
+                }
                 throw;
             }
         }
+
         private string[][] ConvertTableToArray(string[,] table)
         {
             int rows = table.GetLength(0);

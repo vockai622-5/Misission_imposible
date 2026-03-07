@@ -1,10 +1,11 @@
 ﻿using macros;
 using System;
-using System.Linq;
-using System.Reflection;
+using System.Collections.Generic;
 using TFlex.DOCs.Common;
 using TFlex.DOCs.Model;
+using TFlex.DOCs.Model.Desktop;
 using TFlex.DOCs.Model.References;
+using TFlex.DOCs.Model.References.Files;
 using TFlex.DOCs.Model.References.Users;
 using TFlex.PdmFramework.Resolve;
 
@@ -12,6 +13,8 @@ namespace ConsoleUsersTest
 {
     class Program
     {
+        private static readonly Random RandomGenerator = new Random();
+
         [STAThread]
         static void Main(string[] args)
         {
@@ -63,14 +66,32 @@ namespace ConsoleUsersTest
                 Console.WriteLine("Reference = " + userReference.Name);
                 Console.WriteLine("Reference Id = " + userReference.Id);
 
-                CreateTopLevelTestGroup(userReference);
+                var testGroup = CreateTopLevelTestGroup(userReference);
+                if (testGroup == null)
+                    return;
+
+                var createdUsers = new List<User>();
+
+                var user1 = CreateTestEmployee(userReference, testGroup, "Шестаков", "Михаил", "Викторович");
+                if (user1 != null)
+                    createdUsers.Add(user1);
+
+                var user2 = CreateTestEmployee(userReference, testGroup, "Корнаухов", "Иван", "Сергеевич");
+                if (user2 != null)
+                    createdUsers.Add(user2);
+
+                if (createdUsers.Count > 0)
+                {
+                    string workspaceFolderName = "Test_" + DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                    CreateStudentWorkspacesInFiles(connection, workspaceFolderName, createdUsers);
+                }
             }
         }
 
-        private static void CreateTopLevelTestGroup(UserReference userReference)
+        private static UserReferenceObject CreateTopLevelTestGroup(UserReference userReference)
         {
             Console.WriteLine();
-            Console.WriteLine("=== ТЕСТ ЗАПИСИ: создание верхнеуровневой группы ===");
+            Console.WriteLine("=== СОЗДАНИЕ ВЕРХНЕУРОВНЕВОЙ ГРУППЫ ===");
 
             var groupType = userReference.Classes.GroupBaseType;
             Console.WriteLine("Group type = " + groupType?.Name);
@@ -81,182 +102,255 @@ namespace ConsoleUsersTest
             {
                 var newGroup = userReference.CreateReferenceObject(groupType);
 
-                Console.WriteLine("Объект создан в памяти:");
-                PrintObjectShort(newGroup);
+                Console.WriteLine("Объект группы создан в памяти:");
+                PrintUserReferenceObjectShort(newGroup);
 
-                // Для нового объекта BeginChanges НЕ нужен
                 newGroup.FullName.Value = testName;
 
                 if (newGroup.Description != null)
                     newGroup.Description.Value = "Тестовая группа, создана из внешнего приложения";
 
-                Console.WriteLine("Поля заполнены:");
-                Console.WriteLine("FullName = " + newGroup.FullName.Value);
-                Console.WriteLine("Description = " + (newGroup.Description == null ? "<null>" : newGroup.Description.Value));
+                CommitObject(newGroup);
 
                 Console.WriteLine();
-                Console.WriteLine("=== Диагностика коммита ===");
-                Console.WriteLine("SaveSet = " + (newGroup.SaveSet == null ? "null" : newGroup.SaveSet.GetType().FullName));
-
-                DumpCommitLikeMethods(newGroup.GetType(), "Runtime object");
-                DumpCommitLikeMethods(typeof(ReferenceObject), "ReferenceObject");
-                DumpCommitLikeMethods(typeof(ReferenceObjectSaveSet), "ReferenceObjectSaveSet");
-                DumpCommitLikeMethods(typeof(SaveSetEditSession), "SaveSetEditSession");
-                DumpCommitLikeMethods(typeof(EditSession), "EditSession");
-
-                CommitNewObject(newGroup);
-
-                Console.WriteLine();
-                Console.WriteLine("После коммита:");
-                PrintObjectShort(newGroup);
+                Console.WriteLine("После коммита группы:");
+                PrintUserReferenceObjectShort(newGroup);
 
                 Console.WriteLine("УСПЕХ: тестовая группа создана");
+                return newGroup;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Ошибка при создании группы:");
                 Console.WriteLine(ex);
+                return null;
             }
         }
 
-        private static void CommitNewObject(UserReferenceObject obj)
+        private static User CreateTestEmployee(
+            UserReference userReference,
+            ReferenceObject parentGroup,
+            string lastName,
+            string firstName,
+            string middleName)
         {
-            // 1. Сначала пробуем через SaveSet — это теперь основной кандидат
-            if (obj.SaveSet != null)
-            {
-                Console.WriteLine();
-                Console.WriteLine("Пробую коммит через SaveSet...");
-
-                if (TryKnownCommitMethods(obj.SaveSet))
-                    return;
-
-                if (TryCommitViaSessionFactory(obj.SaveSet))
-                    return;
-            }
-
-            // 2. Потом уже пробуем на самом объекте
             Console.WriteLine();
-            Console.WriteLine("Пробую коммит на самом объекте...");
+            Console.WriteLine("=== СОЗДАНИЕ СОТРУДНИКА ===");
+            Console.WriteLine("ParentGroupId = " + parentGroup.Id);
 
-            if (TryKnownCommitMethods(obj))
-                return;
+            string fullName = BuildFullName(lastName, firstName, middleName);
+            string shortName = BuildShortName(lastName, firstName, middleName);
+            string login = BuildLogin(lastName, firstName, middleName);
 
-            if (TryCommitViaSessionFactory(obj))
-                return;
+            Console.WriteLine("ФИО = " + fullName);
+            Console.WriteLine("ShortName = " + shortName);
+            Console.WriteLine("Login = " + login);
 
-            throw new NotSupportedException(
-                "Не найден рабочий способ коммита. " +
-                "Нужен вывод блока 'Диагностика коммита'.");
-        }
-
-        private static bool TryKnownCommitMethods(object target)
-        {
-            string[] methodNames =
+            try
             {
-                "Save",
-                "Apply",
-                "ApplyChanges",
-                "Commit",
-                "CheckIn",
-                "EndEdit",
-                "EndChanges"
-            };
+                var userType = userReference.Classes.EmployerType;
+                Console.WriteLine("User type = " + userType?.Name);
 
-            var type = target.GetType();
+                var newUser = (User)userReference.CreateReferenceObject(parentGroup, userType);
 
-            foreach (var name in methodNames)
-            {
-                var method = type.GetMethod(name, BindingFlags.Public | BindingFlags.Instance, null, Type.EmptyTypes, null);
-                if (method == null)
-                    continue;
+                Console.WriteLine("Пользователь создан в памяти:");
+                PrintUserReferenceObjectShort(newUser);
 
-                Console.WriteLine($"Использую {type.Name}.{name}()");
-                method.Invoke(target, null);
-                return true;
+                newUser.FullName.Value = fullName;
+                newUser.LastName.Value = lastName ?? string.Empty;
+                newUser.FirstName.Value = firstName ?? string.Empty;
+                newUser.Patronymic.Value = middleName ?? string.Empty;
+                newUser.ShortName.Value = shortName;
+                newUser.Login.Value = login;
+
+                if (newUser.Description != null)
+                    newUser.Description.Value = "Тестовый сотрудник из внешнего приложения";
+
+                CommitObject(newUser);
+
+                Console.WriteLine();
+                Console.WriteLine("После коммита сотрудника:");
+                PrintUserReferenceObjectShort(newUser);
+
+                Console.WriteLine("УСПЕХ: сотрудник создан");
+                return newUser;
             }
-
-            return false;
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ошибка при создании сотрудника:");
+                Console.WriteLine(ex);
+                return null;
+            }
         }
 
-        private static bool TryCommitViaSessionFactory(object target)
+        private static void CreateStudentWorkspacesInFiles(
+            ServerConnection connection,
+            string groupFolderName,
+            IEnumerable<User> users)
         {
-            string[] factoryNames =
+            Console.WriteLine();
+            Console.WriteLine("=== СОЗДАНИЕ РАБОЧИХ ПАПОК В СПРАВОЧНИКЕ 'ФАЙЛЫ' ===");
+            Console.WriteLine("Папка группы = " + groupFolderName);
+
+            try
             {
-                "BeginEdit",
-                "CreateEditSession",
-                "BeginSession",
-                "Edit"
-            };
+                var fileReference = new FileReference(connection);
 
-            var type = target.GetType();
-
-            foreach (var factoryName in factoryNames)
-            {
-                var factory = type.GetMethod(factoryName, BindingFlags.Public | BindingFlags.Instance, null, Type.EmptyTypes, null);
-                if (factory == null)
-                    continue;
-
-                Console.WriteLine($"Пробую через {type.Name}.{factoryName}()");
-
-                object session = null;
-                try
+                var studentsRoot = FindStudentsFolder(fileReference);
+                if (studentsRoot == null)
                 {
-                    session = factory.Invoke(target, null);
-                    if (session == null)
-                        continue;
+                    Console.WriteLine("Не найдена папка 'Студенты' в справочнике 'Файлы'.");
+                    return;
+                }
 
-                    Console.WriteLine("Session type = " + session.GetType().FullName);
+                Console.WriteLine("Папка 'Студенты' найдена.");
 
-                    if (TryKnownCommitMethods(session))
+                // Порядок аргументов: description, name
+                FolderObject groupFolder = studentsRoot.CreateFolder(
+                    "Тестовая папка группы " + groupFolderName,
+                    groupFolderName);
+
+                var objectsToCheckIn = new List<DesktopObject> { groupFolder };
+
+                foreach (var user in users)
+                {
+                    string shortName = user.ShortName?.Value;
+
+                    if (string.IsNullOrWhiteSpace(shortName))
                     {
-                        TryDispose(session);
-                        return true;
+                        Console.WriteLine("Пропуск пользователя: пустое короткое имя.");
+                        continue;
                     }
 
-                    TryDispose(session);
+                    FolderObject studentFolder = groupFolder.CreateFolder(
+                        "Рабочая папка пользователя " + shortName,
+                        shortName);
+
+                    objectsToCheckIn.Add(studentFolder);
+                    Console.WriteLine("Создана папка пользователя: " + shortName);
                 }
-                catch
-                {
-                    TryDispose(session);
-                    throw;
-                }
+
+                Desktop.CheckIn(objectsToCheckIn, "Созданы рабочие папки пользователей", false);
+
+                Console.WriteLine("УСПЕХ: рабочие папки в справочнике 'Файлы' созданы");
             }
-
-            return false;
-        }
-
-        private static void TryDispose(object obj)
-        {
-            if (obj is IDisposable d)
-                d.Dispose();
-        }
-
-        private static void DumpCommitLikeMethods(Type type, string title)
-        {
-            Console.WriteLine();
-            Console.WriteLine("=== " + title + " ===");
-            Console.WriteLine(type.FullName);
-
-            var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(m =>
-                    m.Name.IndexOf("save", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    m.Name.IndexOf("apply", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    m.Name.IndexOf("commit", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    m.Name.IndexOf("check", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    m.Name.IndexOf("edit", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    m.Name.IndexOf("change", StringComparison.OrdinalIgnoreCase) >= 0)
-                .OrderBy(m => m.Name);
-
-            foreach (var m in methods)
+            catch (Exception ex)
             {
-                var ps = string.Join(", ", m.GetParameters()
-                    .Select(p => p.ParameterType.Name + " " + p.Name));
-
-                Console.WriteLine($"{m.ReturnType.Name} {m.Name}({ps})");
+                Console.WriteLine("Ошибка при создании рабочих папок в справочнике 'Файлы':");
+                Console.WriteLine(ex);
             }
         }
 
-        private static void PrintObjectShort(UserReferenceObject obj)
+        private static FolderObject FindStudentsFolder(FileReference fileReference)
+        {
+            // Сначала пробуем самые вероятные относительные пути
+            var folder =
+                TryFindFolderByRelativePath(fileReference, @"Файлы\Студенты") ??
+                TryFindFolderByRelativePath(fileReference, @"Файлы\Файлы\Студенты") ??
+                TryFindFolderByRelativePath(fileReference, "Студенты") ??
+                TryFindFolderByRelativePath(fileReference, @"\Файлы\Студенты") ??
+                TryFindFolderByRelativePath(fileReference, @"\Файлы\Файлы\Студенты") ??
+                TryFindFolderByRelativePath(fileReference, @"\Студенты");
+
+            if (folder != null)
+                return folder;
+
+            // Если прямой путь не сработал, пытаемся найти корневую папку "Файлы"
+            var filesRoot =
+                TryFindFolderByRelativePath(fileReference, "Файлы") ??
+                TryFindFolderByRelativePath(fileReference, @"\Файлы") ??
+                TryFindFolderByRelativePath(fileReference, @"Файлы\Файлы") ??
+                TryFindFolderByRelativePath(fileReference, @"\Файлы\Файлы");
+
+            if (filesRoot == null)
+                return null;
+
+            // Ищем "Студенты" рекурсивно внутри найденного корня
+            return FindChildFolderByName(filesRoot, "Студенты");
+        }
+
+        private static FolderObject TryFindFolderByRelativePath(FileReference fileReference, string path)
+        {
+            try
+            {
+                return fileReference.FindByRelativePath(path) as FolderObject;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static FolderObject FindChildFolderByName(FolderObject parentFolder, string folderName)
+        {
+            if (parentFolder == null || string.IsNullOrWhiteSpace(folderName))
+                return null;
+
+            try
+            {
+                parentFolder.Children.Load();
+
+                foreach (ReferenceObject child in parentFolder.Children)
+                {
+                    var childFolder = child as FolderObject;
+                    if (childFolder == null)
+                        continue;
+
+                    string childName = GetFolderName(childFolder);
+
+                    if (string.Equals(childName, folderName, StringComparison.OrdinalIgnoreCase))
+                        return childFolder;
+
+                    var nested = FindChildFolderByName(childFolder, folderName);
+                    if (nested != null)
+                        return nested;
+                }
+            }
+            catch
+            {
+            }
+
+            return null;
+        }
+
+        private static string GetFolderName(FolderObject folder)
+        {
+            if (folder == null)
+                return string.Empty;
+
+            try
+            {
+                var nameProp = folder.GetType().GetProperty("Name");
+                if (nameProp == null)
+                    return string.Empty;
+
+                object rawValue = nameProp.GetValue(folder);
+                if (rawValue == null)
+                    return string.Empty;
+
+                var valueProp = rawValue.GetType().GetProperty("Value");
+                if (valueProp != null)
+                {
+                    object value = valueProp.GetValue(rawValue);
+                    return value?.ToString() ?? string.Empty;
+                }
+
+                return rawValue.ToString();
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private static void CommitObject(UserReferenceObject obj)
+        {
+            bool ok = obj.ApplyChanges();
+            if (!ok)
+                throw new InvalidOperationException("Не удалось применить изменения объекта.");
+        }
+
+        private static void PrintUserReferenceObjectShort(UserReferenceObject obj)
         {
             if (obj == null)
             {
@@ -274,6 +368,153 @@ namespace ConsoleUsersTest
                 " | IsNew = " + obj.IsNew +
                 " | IsModified = " + obj.IsModified +
                 " | IsChanged = " + obj.IsChanged);
+        }
+
+        private static string BuildFullName(string lastName, string firstName, string middleName)
+        {
+            var parts = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(lastName))
+                parts.Add(lastName.Trim());
+
+            if (!string.IsNullOrWhiteSpace(firstName))
+                parts.Add(firstName.Trim());
+
+            if (!string.IsNullOrWhiteSpace(middleName))
+                parts.Add(middleName.Trim());
+
+            return string.Join(" ", parts);
+        }
+
+        private static string BuildShortName(string lastName, string firstName, string middleName)
+        {
+            string firstInitial = GetInitial(firstName);
+            string middleInitial = GetInitial(middleName);
+
+            string result = (lastName ?? string.Empty).Trim();
+
+            if (!string.IsNullOrWhiteSpace(firstInitial))
+                result += " " + firstInitial + ".";
+
+            if (!string.IsNullOrWhiteSpace(middleInitial))
+                result += " " + middleInitial + ".";
+
+            return result.Trim();
+        }
+
+        private static string BuildLogin(string lastName, string firstName, string middleName)
+        {
+            string surnamePart = NormalizeLoginPart(Transliterate(lastName));
+            string firstInitial = NormalizeLoginPart(Transliterate(GetInitial(firstName)));
+            string middleInitial = NormalizeLoginPart(Transliterate(GetInitial(middleName)));
+            string randomSuffix = GenerateRandomSuffix(4);
+
+            if (string.IsNullOrWhiteSpace(surnamePart))
+                surnamePart = "user";
+
+            if (!string.IsNullOrWhiteSpace(firstInitial) && !string.IsNullOrWhiteSpace(middleInitial))
+                return $"{surnamePart}_{firstInitial}_{middleInitial}_{randomSuffix}";
+
+            if (!string.IsNullOrWhiteSpace(firstInitial))
+                return $"{surnamePart}_{firstInitial}_{randomSuffix}";
+
+            return $"{surnamePart}_{randomSuffix}";
+        }
+
+        private static string GenerateRandomSuffix(int digits)
+        {
+            if (digits <= 0)
+                digits = 4;
+
+            int min = (int)Math.Pow(10, digits - 1);
+            int max = (int)Math.Pow(10, digits) - 1;
+
+            lock (RandomGenerator)
+            {
+                return RandomGenerator.Next(min, max + 1).ToString();
+            }
+        }
+
+        private static string GetInitial(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return string.Empty;
+
+            value = value.Trim();
+            return value.Length > 0 ? value.Substring(0, 1) : string.Empty;
+        }
+
+        private static string NormalizeLoginPart(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return string.Empty;
+
+            value = value.ToLowerInvariant();
+            var chars = new List<char>();
+
+            foreach (char ch in value)
+            {
+                if ((ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9'))
+                    chars.Add(ch);
+            }
+
+            return new string(chars.ToArray());
+        }
+
+        private static string Transliterate(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return string.Empty;
+
+            var map = new Dictionary<char, string>
+            {
+                ['а'] = "a",
+                ['б'] = "b",
+                ['в'] = "v",
+                ['г'] = "g",
+                ['д'] = "d",
+                ['е'] = "e",
+                ['ё'] = "e",
+                ['ж'] = "zh",
+                ['з'] = "z",
+                ['и'] = "i",
+                ['й'] = "y",
+                ['к'] = "k",
+                ['л'] = "l",
+                ['м'] = "m",
+                ['н'] = "n",
+                ['о'] = "o",
+                ['п'] = "p",
+                ['р'] = "r",
+                ['с'] = "s",
+                ['т'] = "t",
+                ['у'] = "u",
+                ['ф'] = "f",
+                ['х'] = "kh",
+                ['ц'] = "ts",
+                ['ч'] = "ch",
+                ['ш'] = "sh",
+                ['щ'] = "sch",
+                ['ъ'] = "",
+                ['ы'] = "y",
+                ['ь'] = "",
+                ['э'] = "e",
+                ['ю'] = "yu",
+                ['я'] = "ya"
+            };
+
+            value = value.Trim().ToLowerInvariant();
+            var result = new List<string>();
+
+            foreach (char ch in value)
+            {
+                if (map.TryGetValue(ch, out string mapped))
+                    result.Add(mapped);
+                else
+                    result.Add(ch.ToString());
+            }
+
+            return string.Join("", result);
         }
     }
 }

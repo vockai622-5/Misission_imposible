@@ -10,7 +10,7 @@ namespace macros
     public class PersonManager
     {
         private const string FileName = "person.json";
-        private static Random random = new Random();
+        private readonly Random _random;
 
         public class Person
         {
@@ -23,12 +23,17 @@ namespace macros
             public string Group { get; set; }
         }
 
-        private static string GeneratePassword()
+        public PersonManager()
         {
-            return random.Next(10000, 99999).ToString();
+            _random = new Random();
         }
 
-        private static string GetSafeFilePath()
+        private string GeneratePassword()
+        {
+            return _random.Next(10000, 99999).ToString();
+        }
+
+        private string GetSafeFilePath()
         {
             // Вариант 1: Папка рядом с exe
             try
@@ -75,7 +80,7 @@ namespace macros
             {
                 string tempPath = Path.GetTempPath();
                 string projectFolder = Path.Combine(tempPath, "TFlexDocs");
-                Console.WriteLine($"Попытка 3: Temp - {projectFolder}");
+                Console.WriteLine($"П��пытка 3: Temp - {projectFolder}");
 
                 if (!Directory.Exists(projectFolder))
                 {
@@ -112,7 +117,7 @@ namespace macros
             throw new Exception("Не удалось найти доступную папку для сохранения файла!");
         }
 
-        public static (string groupName, string[][] validData) ProcessPersonData(string groupName, string[][] personArray)
+        public (string groupName, string[][] validData) ProcessPersonData(string groupName, string[][] personArray)
         {
             string filePath = null;
 
@@ -166,7 +171,6 @@ namespace macros
                         }
                     }
 
-                    // Порядок: Фамилия, Имя, Отчество, Логин, Фамилия ИО
                     string lastName = row[0];
                     string firstName = row[1];
                     string middleName = row[2];
