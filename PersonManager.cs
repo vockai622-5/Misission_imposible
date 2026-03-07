@@ -5,153 +5,240 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
-public class PersonManager
+namespace macros
 {
-    private const string FilePath = "person.json";
-    private static Random random = new Random();
-
-    public class Person
+    public class PersonManager
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string MiddleName { get; set; }
-        public string ShortName { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
-        public string Group { get; set; }
-    }
+        private const string FileName = "person.json";
+        private static Random random = new Random();
 
-    public class ProcessResult
-    {
-        public string GroupName { get; set; }
-        public string[][] ValidData { get; set; }
-    }
-
-    private static string GeneratePassword()
-    {
-        return random.Next(10000, 99999).ToString();
-    }
-
-    public static (string groupName, string[][] validData) ProcessPersonData(string groupName, string[][] personArray)
-    {
-        // Создаём файл person.json, если его нет
-        if (!File.Exists(FilePath))
+        public class Person
         {
-            File.WriteAllText(FilePath, "[]");
-            Console.WriteLine("Файл person.json создан.");
+            public string LastName { get; set; }
+            public string FirstName { get; set; }
+            public string MiddleName { get; set; }
+            public string Login { get; set; }
+            public string ShortName { get; set; }
+            public string Password { get; set; }
+            public string Group { get; set; }
         }
 
-        // Читаем существующие данные из JSON
-        string jsonContent = File.ReadAllText(FilePath);
-        List<Person> existingPersons = JsonSerializer.Deserialize<List<Person>>(jsonContent) ?? new List<Person>();
-
-        // Создаём HashSet для быстрой проверки существующих логинов
-        HashSet<string> existingLogins = new HashSet<string>(
-            existingPersons.Select(p => p.Login),
-            StringComparer.OrdinalIgnoreCase
-        );
-
-        // Regex для проверки логина (только латиница и цифры)
-        Regex loginRegex = new Regex(@"^[a-zA-Z0-9]+$");
-
-        List<Person> personsToAdd = new List<Person>();
-        List<string[]> validRows = new List<string[]>();
-
-        Console.WriteLine($"\n=== Обработка группы: {groupName} ===\n");
-
-        for (int i = 0; i < personArray.Length; i++)
+        private static string GeneratePassword()
         {
-            string[] row = personArray[i];
-            int rowNumber = i + 1; // Номер строки для вывода (начинаем с 1)
+            return random.Next(10000, 99999).ToString();
+        }
 
-            // Проверка: если массив не ��одержит 5 элементов
-            if (row == null || row.Length != 5)
+        private static string GetSafeFilePath()
+        {
+            // Вариант 1: Папка рядом с exe
+            try
             {
-                Console.WriteLine($"Строка {rowNumber} удалена: некорректное количество полей.");
-                continue;
-            }
+                string exePath = AppDomain.CurrentDomain.BaseDirectory;
+                Console.WriteLine($"Попытка 1: Папка с exe - {exePath}");
 
-            // Удаление лишних пробелов из всех ячеек
-            for (int j = 0; j < row.Length; j++)
-            {
-                if (row[j] != null)
+                if (!exePath.Contains("OneDrive"))
                 {
-                    // Удаляем пробелы в начале, в конце и множественные пробелы в середине
-                    row[j] = Regex.Replace(row[j].Trim(), @"\s+", " ");
+                    string testFile = Path.Combine(exePath, "test_write.tmp");
+                    File.WriteAllText(testFile, "test");
+                    File.Delete(testFile);
+                    Console.WriteLine("✓ Папка с exe доступна для записи");
+                    return Path.Combine(exePath, FileName);
                 }
             }
-
-            string firstName = row[0];
-            string lastName = row[1];
-            string middleName = row[2];
-            string shortName = row[3];
-            string login = row[4];
-
-            // Проверка: если есть пустое поле
-            if (string.IsNullOrWhiteSpace(firstName) ||
-                string.IsNullOrWhiteSpace(lastName) ||
-                string.IsNullOrWhiteSpace(middleName) ||
-                string.IsNullOrWhiteSpace(shortName) ||
-                string.IsNullOrWhiteSpace(login))
+            catch (Exception ex)
             {
-                Console.WriteLine($"Строка {rowNumber} удалена: содержит пустое поле.");
-                continue;
+                Console.WriteLine($"✗ Не удалось использовать папку с exe: {ex.Message}");
             }
 
-            // Проверка: логин содержит только латиницу и цифры
-            if (!loginRegex.IsMatch(login))
+            // Вариант 2: AppData Local
+            try
             {
-                Console.WriteLine($"Строка {rowNumber} удалена: логин содержит недопустимые символы.");
-                continue;
+                string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                string projectFolder = Path.Combine(appDataPath, "TFlexDocs");
+                Console.WriteLine($"Попытка 2: AppData Local - {projectFolder}");
+
+                if (!Directory.Exists(projectFolder))
+                {
+                    Directory.CreateDirectory(projectFolder);
+                    Console.WriteLine("✓ Папка создана в AppData");
+                }
+
+                return Path.Combine(projectFolder, FileName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"✗ Не удалось использовать AppData: {ex.Message}");
             }
 
-            // Проверка: если логин уже существует в JSON
-            if (existingLogins.Contains(login))
+            // Вариант 3: Temp
+            try
             {
-                Console.WriteLine($"Строка {rowNumber} удалена: пользователь с логином '{login}' уже существует.");
-                continue;
+                string tempPath = Path.GetTempPath();
+                string projectFolder = Path.Combine(tempPath, "TFlexDocs");
+                Console.WriteLine($"Попытка 3: Temp - {projectFolder}");
+
+                if (!Directory.Exists(projectFolder))
+                {
+                    Directory.CreateDirectory(projectFolder);
+                    Console.WriteLine("✓ Папка создана в Temp");
+                }
+
+                return Path.Combine(projectFolder, FileName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"✗ Не удалось использовать Temp: {ex.Message}");
             }
 
-            // Генерируем пароль из 5 случайных цифр
-            string password = GeneratePassword();
-
-            // Если все проверки пройдены, добавляем нового пользователя
-            Person newPerson = new Person
+            // Вариант 4: Корень C:
+            try
             {
-                FirstName = firstName,
-                LastName = lastName,
-                MiddleName = middleName,
-                ShortName = shortName,
-                Login = login,
-                Password = password,
-                Group = groupName
-            };
+                string rootFolder = @"C:\TFlexDocs";
+                Console.WriteLine($"Попытка 4: Корень диска C - {rootFolder}");
 
-            personsToAdd.Add(newPerson);
-            existingLogins.Add(login); // Добавляем в HashSet для избежания дубликатов в текущей пачке
+                if (!Directory.Exists(rootFolder))
+                {
+                    Directory.CreateDirectory(rootFolder);
+                    Console.WriteLine("✓ Папка создана в корне C:");
+                }
 
-            // Добавляем валидную строку с паролем в результирующий массив
-            string[] validRow = new string[] { firstName, lastName, middleName, shortName, login, password };
-            validRows.Add(validRow);
+                return Path.Combine(rootFolder, FileName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"✗ Не удалось использовать корень C: {ex.Message}");
+            }
 
-            Console.WriteLine($"Строка {rowNumber}: пользователь '{firstName} {lastName}' (логин: {login}, пароль: {password}) добавлен.");
+            throw new Exception("Не удалось найти доступную папку для сохранения файла!");
         }
 
-        // Добавляем новых пользователей к существующим
-        existingPersons.AddRange(personsToAdd);
-
-        // Записываем обновлённые данные обратно в JSON
-        string updatedJson = JsonSerializer.Serialize(existingPersons, new JsonSerializerOptions
+        public static (string groupName, string[][] validData) ProcessPersonData(string groupName, string[][] personArray)
         {
-            WriteIndented = true,
-            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-        });
-        File.WriteAllText(FilePath, updatedJson);
+            string filePath = null;
 
-        Console.WriteLine($"\nВсего добавлено записей: {personsToAdd.Count}");
-        Console.WriteLine($"Общее количество записей в файле: {existingPersons.Count}");
+            try
+            {
+                Console.WriteLine("=== Поиск безопасного места для файла ===\n");
+                filePath = GetSafeFilePath();
+                Console.WriteLine($"\n✓ Выбран путь: {filePath}\n");
 
-        // Возвращаем кортеж: название группы и массив валидных строк
-        return (groupName, validRows.ToArray());
+                if (!File.Exists(filePath))
+                {
+                    File.WriteAllText(filePath, "[]", System.Text.Encoding.UTF8);
+                    Console.WriteLine($"✓ Файл {FileName} создан");
+                }
+                else
+                {
+                    Console.WriteLine($"✓ Файл {FileName} уже существует");
+                }
+
+                string jsonContent = File.ReadAllText(filePath, System.Text.Encoding.UTF8);
+                List<Person> existingPersons = JsonSerializer.Deserialize<List<Person>>(jsonContent) ?? new List<Person>();
+
+                HashSet<string> existingLogins = new HashSet<string>(
+                    existingPersons.Select(p => p.Login),
+                    StringComparer.OrdinalIgnoreCase
+                );
+
+                Regex loginRegex = new Regex(@"^[a-zA-Z0-9]+$");
+
+                List<Person> personsToAdd = new List<Person>();
+                List<string[]> validRows = new List<string[]>();
+
+                Console.WriteLine($"\n=== Обработка группы: {groupName} ===\n");
+
+                for (int i = 0; i < personArray.Length; i++)
+                {
+                    string[] row = personArray[i];
+                    int rowNumber = i + 1;
+
+                    if (row == null || row.Length != 5)
+                    {
+                        Console.WriteLine($"Строка {rowNumber} удалена: некорректное количество полей.");
+                        continue;
+                    }
+
+                    for (int j = 0; j < row.Length; j++)
+                    {
+                        if (row[j] != null)
+                        {
+                            row[j] = Regex.Replace(row[j].Trim(), @"\s+", " ");
+                        }
+                    }
+
+                    // Порядок: Фамилия, Имя, Отчество, Логин, Фамилия ИО
+                    string lastName = row[0];
+                    string firstName = row[1];
+                    string middleName = row[2];
+                    string login = row[3];
+                    string shortName = row[4];
+
+                    if (string.IsNullOrWhiteSpace(lastName) ||
+                        string.IsNullOrWhiteSpace(firstName) ||
+                        string.IsNullOrWhiteSpace(middleName) ||
+                        string.IsNullOrWhiteSpace(login))
+                    {
+                        Console.WriteLine($"Строка {rowNumber} удалена: содержит пустое поле.");
+                        continue;
+                    }
+
+                    if (!loginRegex.IsMatch(login))
+                    {
+                        Console.WriteLine($"Строка {rowNumber} удалена: логин содержит недопустимые символы.");
+                        continue;
+                    }
+
+                    if (existingLogins.Contains(login))
+                    {
+                        Console.WriteLine($"Строка {rowNumber} удалена: пользователь с логином '{login}' уже существует.");
+                        continue;
+                    }
+
+                    string password = GeneratePassword();
+
+                    Person newPerson = new Person
+                    {
+                        LastName = lastName,
+                        FirstName = firstName,
+                        MiddleName = middleName,
+                        Login = login,
+                        ShortName = shortName,
+                        Password = password,
+                        Group = groupName
+                    };
+
+                    personsToAdd.Add(newPerson);
+                    existingLogins.Add(login);
+
+                    string[] validRow = new string[] { lastName, firstName, middleName, login, shortName, password };
+                    validRows.Add(validRow);
+
+                    Console.WriteLine($"Строка {rowNumber}: {lastName} {firstName} (логин: {login}, пароль: {password}) добавлен.");
+                }
+
+                existingPersons.AddRange(personsToAdd);
+
+                string updatedJson = JsonSerializer.Serialize(existingPersons, new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+                });
+                File.WriteAllText(filePath, updatedJson, System.Text.Encoding.UTF8);
+
+                Console.WriteLine($"\n✓ Всего добавлено записей: {personsToAdd.Count}");
+                Console.WriteLine($"✓ Общее количество записей в файле: {existingPersons.Count}");
+                Console.WriteLine($"✓ Файл сохранён: {filePath}\n");
+
+                return (groupName, validRows.ToArray());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"\n❌ КРИТИЧЕСКАЯ ОШИБКА: {ex.GetType().Name}");
+                Console.WriteLine($"Сообщение: {ex.Message}");
+                Console.WriteLine($"Путь к файлу: {filePath}");
+                Console.WriteLine($"\nStack Trace:\n{ex.StackTrace}");
+                throw;
+            }
+        }
     }
 }

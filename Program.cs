@@ -1,4 +1,5 @@
-﻿using System;
+﻿using macros;
+using System;
 using System.Linq;
 using System.Reflection;
 using TFlex.DOCs.Common;
@@ -14,6 +15,14 @@ namespace ConsoleUsersTest
         [STAThread]
         static void Main(string[] args)
         {
+            var processor = new StudentProcessor();
+
+            string excelFilePath = @"C:\Users\astaf\Desktop\data.xlsx";
+
+            // Вызываем одну функцию - она делает всё
+            var (groupName, validData) = processor.ProcessStudentsFromExcel(excelFilePath);
+
+
             AssemblyResolver.Instance.AddDirectory(
                 @"C:\Program Files (x86)\T-FLEX DOCs 17\Program");
 

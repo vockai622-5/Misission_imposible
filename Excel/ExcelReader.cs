@@ -1,81 +1,142 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
-using macros.Models;
 using macros.Utils;
 
 namespace macros.Excel
 {
     public class ExcelReader
     {
-        public List<StudentRow> ReadStudents(string filePath)
+        public (string GroupName, string[,] StudentsTable) ReadStudents(string filePath)
         {
-            var students = new List<StudentRow>();
+            if (string.IsNullOrWhiteSpace(filePath))
+                throw new ArgumentException("Не указан путь к файлу.", nameof(filePath));
+
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException("Файл не найден.", filePath);
+
+            var groupName = StringCleaner.CleanGroupName(
+                Path.GetFileNameWithoutExtension(filePath));
+
+            var students = new List<string[]>();
 
             using (var workbook = new XLWorkbook(filePath))
             {
                 var worksheet = workbook.Worksheet(1);
-
                 var headerMap = GetHeaderMap(worksheet);
 
                 foreach (var row in worksheet.RowsUsed().Skip(1))
                 {
-                    // Пропускаем полностью пустые строки
                     if (IsRowEmpty(row))
                         continue;
 
-                    var student = new StudentRow
-                    {
-                        RowNumber = row.RowNumber(),
-                        LastName = StringCleaner.Clean(row.Cell(headerMap.LastNameColumn).GetString()),
-                        FirstName = StringCleaner.Clean(row.Cell(headerMap.FirstNameColumn).GetString()),
-                        MiddleName = StringCleaner.Clean(row.Cell(headerMap.MiddleNameColumn).GetString()),
-                        Login = StringCleaner.Clean(row.Cell(headerMap.LoginColumn).GetString())
-                    };
+                    // Читаем "№", но не используем в результате
+                    var number = GetCellValueSafe(row, headerMap.NumberColumn);
 
-                    students.Add(student);
+                    var lastName = StringCleaner.CleanName(
+                        GetCellValueSafe(row, headerMap.LastNameColumn));
+
+                    var firstName = StringCleaner.CleanName(
+                        GetCellValueSafe(row, headerMap.FirstNameColumn));
+
+                    var middleName = StringCleaner.CleanName(
+                        GetCellValueSafe(row, headerMap.MiddleNameColumn));
+
+                    var login = StringCleaner.CleanLogin(
+                        GetCellValueSafe(row, headerMap.LoginColumn));
+
+                    var shortName = StringCleaner.BuildShortName(
+                        lastName,
+                        firstName,
+                        middleName);
+
+                    if (string.IsNullOrWhiteSpace(lastName)
+                        && string.IsNullOrWhiteSpace(firstName)
+                        && string.IsNullOrWhiteSpace(middleName)
+                        && string.IsNullOrWhiteSpace(login))
+                    {
+                        continue;
+                    }
+
+                    students.Add(new[]
+                    {
+                        lastName,
+                        firstName,
+                        middleName,
+                        login,
+                        shortName
+                    });
                 }
             }
 
-            return students;
+            return (groupName, BuildStudentsTable(students));
         }
 
         private HeaderMap GetHeaderMap(IXLWorksheet worksheet)
         {
             var headerRow = worksheet.Row(1);
 
-            var map = new HeaderMap
+            return new HeaderMap
             {
-                LastNameColumn = FindColumn(headerRow, "Фамилия"),
-                FirstNameColumn = FindColumn(headerRow, "Имя"),
-                MiddleNameColumn = FindColumn(headerRow, "Отчество"),
-                LoginColumn = FindColumn(headerRow, "Логин")
+                NumberColumn = FindRequiredColumn(headerRow, "№", "N", "No", "Номер"),
+                LastNameColumn = FindRequiredColumn(headerRow, "Фамилия"),
+                FirstNameColumn = FindRequiredColumn(headerRow, "Имя"),
+                MiddleNameColumn = FindRequiredColumn(headerRow, "Отчество"),
+                LoginColumn = FindRequiredColumn(headerRow, "Логин")
             };
-
-            return map;
         }
 
-        private int FindColumn(IXLRow headerRow, string columnName)
+        private int FindRequiredColumn(IXLRow headerRow, params string[] possibleNames)
         {
             foreach (var cell in headerRow.CellsUsed())
             {
                 var value = StringCleaner.Clean(cell.GetString());
 
-                if (string.Equals(value, columnName, StringComparison.OrdinalIgnoreCase))
+                if (possibleNames.Any(name =>
+                    string.Equals(value, name, StringComparison.OrdinalIgnoreCase)))
+                {
                     return cell.Address.ColumnNumber;
+                }
             }
 
-            throw new Exception("Не найден обязательный столбец: " + columnName);
+            throw new Exception("Не найден обязательный столбец: " +
+                                string.Join(" / ", possibleNames));
+        }
+
+        private string GetCellValueSafe(IXLRow row, int columnNumber)
+        {
+            if (columnNumber <= 0)
+                return string.Empty;
+
+            return row.Cell(columnNumber).GetString();
         }
 
         private bool IsRowEmpty(IXLRow row)
         {
-            return row.CellsUsed().Count() == 0;
+            return row.Cells().All(c => string.IsNullOrWhiteSpace(c.GetString()));
+        }
+
+        private string[,] BuildStudentsTable(List<string[]> students)
+        {
+            const int columnsCount = 5;
+            var table = new string[students.Count, columnsCount];
+
+            for (int i = 0; i < students.Count; i++)
+            {
+                for (int j = 0; j < columnsCount; j++)
+                {
+                    table[i, j] = students[i][j];
+                }
+            }
+
+            return table;
         }
 
         private class HeaderMap
         {
+            public int NumberColumn { get; set; }
             public int LastNameColumn { get; set; }
             public int FirstNameColumn { get; set; }
             public int MiddleNameColumn { get; set; }
